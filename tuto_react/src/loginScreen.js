@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Text, StyleSheet, View } from 'react-native';
-import Button from "react-native-web/dist/exports/Button";
+import {Button, Text, StyleSheet, View } from 'react-native';
+
 
 export default class LoginScreen extends Component {
     static _LoginToAPI() {

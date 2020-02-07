@@ -10,7 +10,7 @@ export default class LoginScreen extends Component {
     static loginScreenView () {
         return(
             <View style={styles.container}>
-                <View style={styles.buttonContainer}>
+                <View style={styles.titleContainer}>
                     <Text style={styles.titleStyle}>Tutorial React / React Native</Text>
                 </View>
                 <View style={styles.buttonContainer}>
@@ -31,10 +31,16 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center',
     },
     buttonContainer: {
-        margin: 20
+        marginLeft: 50,
+        marginRight: 50,
+        marginTop: 20,
+        marginBottom: 20
+    },
+    titleContainer: {
+        margin: 5,
+        alignItems: 'center'
     },
     titleStyle: {
         fontSize: 30

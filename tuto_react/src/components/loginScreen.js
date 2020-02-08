@@ -2,10 +2,24 @@ import React, { Component } from 'react';
 import {Button, Text, StyleSheet, View } from 'react-native';
 import mainScreen from "./mainScreen";
 import * as NavigatorRef from '../navigation/navigatorRef'
+import {refreshTokens} from "./../utils/authUtils";
 
 
-export default class LoginScreen extends Component {
-    static _LoginToAPI() {
+export default class LoginScreen extends Component
+{
+    async componentDidMount()
+    {
+        const tokenExpirationTime = await getUserData('expirationTime');
+        if (tokenExpirationTime && new Date().getTime() > tokenExpirationTime)
+        {
+            this.setState({ accessTokenAvailable: true });
+        }
+    }
+
+    static _LoginToAPI()
+    {
+        refreshTokens();
+        alert('TODO login to API Spotify')
         NavigatorRef.replace('Home')
     }
 

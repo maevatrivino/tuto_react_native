@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {Button, Text, StyleSheet, View } from 'react-native';
-import mainScreen from "./mainScreen";
 import * as NavigatorRef from '../navigation/navigatorRef'
 import {refreshTokens} from "./../utils/authUtils";
 
@@ -18,8 +17,8 @@ export default class LoginScreen extends Component
 
     static _LoginToAPI()
     {
-        refreshTokens();
-        // NavigatorRef.replace('Home')
+        // refreshTokens();
+        NavigatorRef.replace('Home')
     }
 
     static loginScreenView () {

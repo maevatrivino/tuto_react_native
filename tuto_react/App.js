@@ -28,7 +28,7 @@ function App() {
       //console.log(getSpotifyCredentials());
       <NavigationContainer ref={navigationRef}>
         <Stack.Navigator headerMode="none">
-          <Stack.Screen name="Login" component={LoginScreen} options={{headerLeft: null}}/>
+          <Stack.Screen name="Login" component={LoginScreen}/>
           <Stack.Screen name="Home" component={MainScreen} />
         </Stack.Navigator>
       </NavigationContainer>

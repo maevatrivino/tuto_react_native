@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import {Button, Text, StyleSheet, View } from 'react-native';
+import mainScreen from "./mainScreen";
+import * as NavigatorRef from '../navigation/navigatorRef'
 
 
 export default class LoginScreen extends Component {
     static _LoginToAPI() {
-        alert('TODO login to API Spotify')
+        NavigatorRef.replace('Home')
     }
 
     static loginScreenView () {

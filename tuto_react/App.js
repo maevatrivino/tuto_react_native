@@ -7,7 +7,6 @@ import mainScreen from "./src/components/mainScreen";
 import {navigationRef} from "./src/navigation/navigatorRef";
 import {createStackNavigator} from "@react-navigation/stack";
 import { StyleSheet, Text, View } from 'react-native';
-import loginScreen from "./src/components/loginScreen";
 import {getSpotifyCredentials} from "./src/utils/authUtils";
 
 const Stack = createStackNavigator();

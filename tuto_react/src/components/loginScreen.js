@@ -19,8 +19,7 @@ export default class LoginScreen extends Component
     static _LoginToAPI()
     {
         refreshTokens();
-        alert('TODO login to API Spotify')
-        NavigatorRef.replace('Home')
+        // NavigatorRef.replace('Home')
     }
 
     static loginScreenView () {

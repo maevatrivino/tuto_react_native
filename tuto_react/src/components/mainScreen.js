@@ -1,37 +1,60 @@
 import React, { Component } from 'react';
-import {Button, Text, StyleSheet, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import homeTab from "./tabs/homeTab";
+import playlistTab from "./tabs/playlistTab";
+import searchTab from "./tabs/searchTab";
+import { Ionicons } from '@expo/vector-icons';
 
+function HomeView(){
+    return(
+      homeTab.homeView()
+    );
+}
 
-export default class MainScreen extends Component {
+function PlaylistView(){
+    return(
+        playlistTab.playlistView()
+    )
+}
 
-    static mainScreen () {
-        return(
-            <View style={styles.container}>
-                <View style={styles.titleContainer}>
-                    <Text style={styles.titleStyle}>Tutorial React / React Native</Text>
-                </View>
-            </View>
+function SearchView(){
+    return(
+        searchTab.searchView()
+    )
+}
+
+const Tab = createBottomTabNavigator();
+
+export default class MainScreen extends Component{
+    static mainScreen(){
+        return (
+            <NavigationContainer independent={true}>
+                <Tab.Navigator screenOptions={({route}) => ({
+                        tabBarIcon: ({focused, color, size}) => {
+                            let iconName;
+
+                            if(route.name === 'Home') {
+                                iconName = 'md-home';
+                            }else if(route.name === 'Playlist'){
+                                iconName = 'ios-list';
+                            }else if(route.name === 'Search'){
+                                iconName = 'md-search';
+                            }
+
+                            return <Ionicons name={iconName} size={size} color={color}/>;
+                        },
+                    })}
+                               tabBarOptions={{
+                                   activeTintColor: '#20D760',
+                                   inactiveTintColor: 'gray',
+                               }}
+                >
+                    <Tab.Screen name="Home" component={HomeView} />
+                    <Tab.Screen name="Playlist" component={PlaylistView} />
+                    <Tab.Screen name="Search" component={SearchView} />
+                </Tab.Navigator>
+            </NavigationContainer>
         );
     }
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-    },
-    buttonContainer: {
-        marginLeft: 50,
-        marginRight: 50,
-        marginTop: 20,
-        marginBottom: 20
-    },
-    titleContainer: {
-        margin: 5,
-        alignItems: 'center'
-    },
-    titleStyle: {
-        fontSize: 30
-    }
-
-});

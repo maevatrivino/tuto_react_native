@@ -6,6 +6,8 @@ import loginScreen from "./src/components/loginScreen";
 import mainScreen from "./src/components/mainScreen";
 import {navigationRef} from "./src/navigation/navigatorRef";
 import {createStackNavigator} from "@react-navigation/stack";
+import { StyleSheet, Text, View } from 'react-native';
+import {getSpotifyCredentials} from "./src/utils/authUtils";
 
 const Stack = createStackNavigator();
 
@@ -23,6 +25,7 @@ function MainScreen() {
 
 function App() {
   return (
+      //console.log(getSpotifyCredentials());
       <NavigationContainer ref={navigationRef}>
         <Stack.Navigator headerMode="none">
           <Stack.Screen name="Login" component={LoginScreen} options={{headerLeft: null}}/>

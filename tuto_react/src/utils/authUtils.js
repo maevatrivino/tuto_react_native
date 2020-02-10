@@ -1,7 +1,7 @@
 import {AuthSession} from 'expo'
 import { encode as btoa } from 'base-64';
-import spotifyCredentials from "./secret"
 import {storeData,retrieveData} from "./dataStore"
+import {spotifyCredentials} from './secret'
 
 const scopesArr = ['user-modify-playback-state','user-read-currently-playing','user-read-playback-state','user-library-modify',
                    'user-library-read','playlist-read-private','playlist-read-collaborative','playlist-modify-public',
@@ -14,19 +14,21 @@ export function getSpotifyRedirectUrl(){
 
 export function getSpotifyCredentials()
 {
-    return {
-        clientId: '13e3de8527074830a2c3ac378a880ce6',
-        clientSecret: 'ba0d1c842edd4927ae930a6f78153823',
-        redirectUri: 'https://auth.expo.io/@greyhopes/tuto_react'
-    }
+    return spotifyCredentials;
 }
 
+//Retrieves the authorization codes to have access to the spotify API
 const getAuthorizationCode = async () => 
 {
     try 
     {
-        const credentials = getSpotifyCredentials(); //we wrote this function above
-        const redirectUrl = AuthSession.getRedirectUrl(); //this will be something like https://auth.expo.io/@your-username/your-app-slug
+        //Retrieves the credentials 
+        const credentials = getSpotifyCredentials();
+
+        //Setup AuthSession for redirection to our app after login
+        const redirectUrl = AuthSession.getRedirectUrl();
+
+        //Launches the authentification process
         const result = await AuthSession.startAsync({
             authUrl:
             'https://accounts.spotify.com/authorize' +
@@ -47,11 +49,15 @@ const getAuthorizationCode = async () =>
     
 }
 
+//Retrieves the tokens from the spotify API
 const getTokens = async () => 
 {
     try {
-    const authorizationCode = await getAuthorizationCode() //we wrote this function above
-    const credentials = getSpotifyCredentials() //we wrote this function above (could also run this outside of the functions and store the credentials in local scope)
+    //Retrieves all useful information:
+    const authorizationCode = await getAuthorizationCode();
+    const credentials = getSpotifyCredentials();
+
+    //Encode the credentials to base64 and sends tge request to the account API
     const credsB64 = btoa(`${credentials.clientId}:${credentials.clientSecret}`);
     const response = await fetch('https://accounts.spotify.com/api/token', {
         method: 'POST',
@@ -63,27 +69,33 @@ const getTokens = async () =>
         credentials.redirectUri
         }`,
     });
-    const responseJson = await response.json();
-    // destructure the response and rename the properties to be in camelCase to satisfy my linter ;)
-    const {
-        access_token: accessToken,
-        refresh_token: refreshToken,
-        expires_in: expiresIn,
-    } = responseJson;
 
-    const expirationTime = new Date().getTime() + expiresIn * 1000;
-    await storeData('accessToken', accessToken);
-    await storeData('refreshToken', refreshToken);
-    await storeData('expirationTime', expirationTime);
+    //Converts the response to JSON
+    const responseJson = await response.json();
+
+    //Calculates the expiration time of our tokens
+    const expirationTime = new Date().getTime() + responseJson.expires_in * 1000;
+
+    //Store all data in the async storage
+    await storeData('accessToken', responseJson.access_token);
+    await storeData('refreshToken',expirationTime);
+    await storeData('expirationTime', responseJson.expires_in);
     } catch (err) {
     console.error(err);
     }
 }
 
+export const getAccessToken = async() =>
+{
+    return await retrieveData('accessToken');
+}
+
+//Refreshes existing tokens 
 export const refreshTokens = async () => {
     try 
     {
-        const credentials = getSpotifyCredentials() //we wrote this function above
+        //Just like in getTokens we'll fetch the tokens from the account API
+        const credentials = getSpotifyCredentials();
         const credsB64 = btoa(`${credentials.clientId}:${credentials.clientSecret}`);
         const refreshToken = await retrieveData('refreshToken');
         const response = await fetch('https://accounts.spotify.com/api/token', {
@@ -95,29 +107,60 @@ export const refreshTokens = async () => {
         body: `grant_type=refresh_token&refresh_token=${refreshToken}`,
         });
         const responseJson = await response.json();
+
+        //If the response is an error we'll try to retrieve the tokens normally as it can just be a first connexion
+
         if (responseJson.error) 
         {
             await getTokens();
         } 
         else 
         {
-            const {
-                access_token: newAccessToken,
-                refresh_token: newRefreshToken,
-                expires_in: expiresIn,
-            } = responseJson;
-
-            const expirationTime = new Date().getTime() + expiresIn * 1000;
-            await storeData('accessToken', newAccessToken);
-            if (newRefreshToken) 
+            const expirationTime = new Date().getTime() + responseJson.expires_in * 1000;
+            await storeData('accessToken', responseJson.access_token);
+            if (responseJson.refresh_token) 
             {
-                await storeData('refreshToken', newRefreshToken);
+                await storeData('refreshToken', responseJson);
             }
-            await storeData('expirationTime', expirationTime);
+            await storeData('expirationTime', responseJson);
         }
+
+        //We return true for success
+        return true;
     } 
     catch (err) 
     {
         console.error(err);
+        return false;
     }
 }
+
+export const isAlreadyConnected = async() =>
+{
+    const accessToken = await retrieveData('accessToken');
+    if(!accessToken)
+    {
+        return false
+    }   
+    else
+    {
+        return true;
+    }
+}
+
+//Check and refreshes the tokens if needed 
+export const checkAndRefreshTokens = async() =>
+{
+    const expirationTime = await retrieveData("expirationTime");
+    if(!expirationTime || new DataCue.getTime()>expirationTime)
+    {
+        const response = await refreshTokens();
+        //An error as occured
+        if(response = null)
+        {
+            return false;
+        }
+        return true;
+    }
+    return true;
+} 

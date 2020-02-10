@@ -1,24 +1,29 @@
 import React, { Component } from 'react';
 import {Button, Text, StyleSheet, View } from 'react-native';
 import * as NavigatorRef from '../navigation/navigatorRef'
-import {refreshTokens} from "./../utils/authUtils";
-
+import {refreshTokens,isAlreadyConnected, checkAndRefreshTokens} from "./../utils/authUtils";
 
 export default class LoginScreen extends Component
 {
     async componentDidMount()
     {
-        const tokenExpirationTime = await getUserData('expirationTime');
-        if (tokenExpirationTime && new Date().getTime() > tokenExpirationTime)
+        if(await isAlreadyConnected())
         {
-            this.setState({ accessTokenAvailable: true });
-        }
+            await checkAndRefreshTokens();
+            NavigatorRef.replace('Home');
+        } 
     }
 
-    static _LoginToAPI()
+    static _LoginToAPI = async() =>
     {
-        // refreshTokens();
-        NavigatorRef.replace('Home')
+        const result = await refreshTokens();
+
+        if(result)
+        {
+            NavigatorRef.replace('Home');
+        }
+
+        //TODO ELSE ERROR
     }
 
     static loginScreenView () {

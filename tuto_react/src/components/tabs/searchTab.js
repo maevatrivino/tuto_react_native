@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import {Text, View} from "react-native";
+import {Text, ScrollView} from "react-native";
 
 export default class SearchView extends Component{
     static searchView (){
         return(
-            <View>
+            <ScrollView>
                 <Text>SearchTabView</Text>
-            </View>
+            </ScrollView>
         );
     }
 }

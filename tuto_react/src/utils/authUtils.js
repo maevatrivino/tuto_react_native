@@ -85,6 +85,11 @@ const getTokens = async () =>
     }
 }
 
+export const getAccessToken = async() =>
+{
+    return await retrieveData('accessToken');
+}
+
 //Refreshes existing tokens 
 export const refreshTokens = async () => {
     try 
@@ -127,6 +132,19 @@ export const refreshTokens = async () => {
     {
         console.error(err);
         return false;
+    }
+}
+
+export const isAlreadyConnected = async() =>
+{
+    const accessToken = await retrieveData('accessToken');
+    if(!accessToken)
+    {
+        return false
+    }   
+    else
+    {
+        return true;
     }
 }
 

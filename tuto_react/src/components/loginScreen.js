@@ -1,10 +1,19 @@
 import React, { Component } from 'react';
 import {Button, Text, StyleSheet, View } from 'react-native';
 import * as NavigatorRef from '../navigation/navigatorRef'
-import {refreshTokens} from "./../utils/authUtils";
+import {refreshTokens,isAlreadyConnected, checkAndRefreshTokens} from "./../utils/authUtils";
 
 export default class LoginScreen extends Component
 {
+    async componentDidMount()
+    {
+        if(await isAlreadyConnected())
+        {
+            await checkAndRefreshTokens();
+            NavigatorRef.replace('Home');
+        } 
+    }
+
     static _LoginToAPI = async() =>
     {
         const result = await refreshTokens();

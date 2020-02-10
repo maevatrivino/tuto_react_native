@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Text, View, StyleSheet} from "react-native";
+import {Text, View, StyleSheet, Button} from "react-native";
 
 export default class HomeTab extends Component{
     static homeView (){
@@ -8,6 +8,13 @@ export default class HomeTab extends Component{
                 <View style={styleHome.titleContainer}>
                     {/*TODO get  username Spotify here*/}
                     <Text style={styleHome.title}>Welcome ...</Text>
+                </View>
+                <View style={styleHome.buttonContainer}>
+                    <Button
+                            onPress={null}
+                            title="Log out"
+                            color="#20D760"
+                    />
                 </View>
             </View>
         );
@@ -25,6 +32,12 @@ const styleHome = StyleSheet.create({
     },
     title: {
         fontSize: 30
+    },
+    buttonContainer: {
+        marginLeft: 50,
+        marginRight: 50,
+        marginTop: 20,
+        marginBottom: 20
     }
 });
 

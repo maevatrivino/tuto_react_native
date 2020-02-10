@@ -78,8 +78,8 @@ const getTokens = async () =>
 
     //Store all data in the async storage
     await storeData('accessToken', responseJson.access_token);
-    await storeData('refreshToken',expirationTime);
-    await storeData('expirationTime', responseJson.expires_in);
+    await storeData('refreshToken',responseJson.refresh_token);
+    await storeData('expirationTime', expirationTime);
     } catch (err) {
     console.error(err);
     }
@@ -117,12 +117,13 @@ export const refreshTokens = async () => {
         else 
         {
             const expirationTime = new Date().getTime() + responseJson.expires_in * 1000;
+            
             await storeData('accessToken', responseJson.access_token);
             if (responseJson.refresh_token) 
             {
-                await storeData('refreshToken', responseJson);
+                await storeData('refreshToken', responseJson.refresh_token);
             }
-            await storeData('expirationTime', responseJson);
+            await storeData('expirationTime', expirationTime);
         }
 
         //We return true for success
@@ -138,7 +139,9 @@ export const refreshTokens = async () => {
 export const isAlreadyConnected = async() =>
 {
     const accessToken = await retrieveData('accessToken');
-    if(!accessToken)
+    const expirationTime = await retrieveData("expirationTime");
+
+    if(!accessToken || !expirationTime)
     {
         return false
     }   
@@ -152,11 +155,12 @@ export const isAlreadyConnected = async() =>
 export const checkAndRefreshTokens = async() =>
 {
     const expirationTime = await retrieveData("expirationTime");
-    if(!expirationTime || new DataCue.getTime()>expirationTime)
+
+    if(expirationTime == null || new Date().getTime() > expirationTime)
     {
         const response = await refreshTokens();
         //An error as occured
-        if(response = null)
+        if(response == null)
         {
             return false;
         }

@@ -5,8 +5,8 @@ import {refreshTokens,isAlreadyConnected, checkAndRefreshTokens} from "./../util
 
 export default class LoginScreen extends Component
 {
-    async componentDidMount()
-    {
+    static checkIfConnected = async() =>
+    { 
         if(await isAlreadyConnected())
         {
             await checkAndRefreshTokens();
@@ -27,6 +27,7 @@ export default class LoginScreen extends Component
     }
 
     static loginScreenView () {
+        this.checkIfConnected();
         return(
             <View style={styles.container}>
                 <View style={styles.titleContainer}>

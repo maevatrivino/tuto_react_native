@@ -12,9 +12,10 @@ export const retrieveData = async (key) => {
     try {
         const value = await AsyncStorage.getItem(key);
         if (value !== null) {
+        // We have data!!
             return value;
         }
     } catch (error) {
-        // Error retrieving data
+        return false;
     }
 };

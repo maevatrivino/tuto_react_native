@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Button, Text, StyleSheet, View } from 'react-native';
 import * as NavigatorRef from '../navigation/navigatorRef'
 import {refreshTokens,isAlreadyConnected, checkAndRefreshTokens} from "./../utils/authUtils";
-import {getCurrentUser} from "../utils/apiUtils";
+import {getCurrentUser} from "../api/apiUtils";
 
 export default class LoginScreen extends Component
 {
@@ -10,9 +10,9 @@ export default class LoginScreen extends Component
     { 
         if(await isAlreadyConnected())
         {
+			await checkAndRefreshTokens();
             let user = await getCurrentUser();
             NavigatorRef.setUsername(user.display_name);
-            await checkAndRefreshTokens();
             NavigatorRef.replace('Home');
         } 
     }

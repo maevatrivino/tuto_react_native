@@ -29,7 +29,7 @@ export default class PlaylistView extends Component{
                                                 source={{ uri: playlist.source }}
                                             />
                                         </View>
-                                        <View>
+                                        <View style={stylePlaylist.infoPlaylistContainer}>
                                             <Text>{playlist.name}</Text>
                                         </View>
                                     </View>
@@ -54,7 +54,9 @@ const stylePlaylist = StyleSheet.create({
     cardContainer:{
         flex: 1,
         flexDirection: 'row',
-        justifyContent: 'space-between',
         alignItems: 'center'
-    }
+    },
+    infoPlaylistContainer:{
+        marginLeft: 10
+    },
 });

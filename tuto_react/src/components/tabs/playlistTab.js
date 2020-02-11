@@ -14,30 +14,40 @@ const playlists = [
 ];
 
 export default class PlaylistView extends Component{
-    static playlistView (){
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
         return(
             <ScrollView style={stylePlaylist.container}>
-                    {
-                        playlists.map((playlist, i) =>{
-                            return(
-                                <Card key={i}>
-                                    <View style={stylePlaylist.cardContainer}>
-                                        <View>
-                                            <Image
-                                                style={stylePlaylist.imageStyle}
-                                                resizeMode="cover"
-                                                source={{ uri: playlist.source }}
-                                            />
-                                        </View>
-                                        <View style={stylePlaylist.infoPlaylistContainer}>
-                                            <Text>{playlist.name}</Text>
-                                        </View>
+                {
+                    playlists.map((playlist, i) =>{
+                        return(
+                            <Card key={i}>
+                                <View style={stylePlaylist.cardContainer}>
+                                    <View>
+                                        <Image
+                                            style={stylePlaylist.imageStyle}
+                                            resizeMode="cover"
+                                            source={{ uri: playlist.source }}
+                                        />
                                     </View>
-                                </Card>
-                            );
-                        })
-                    }
+                                    <View style={stylePlaylist.infoPlaylistContainer}>
+                                        <Text>{playlist.name}</Text>
+                                    </View>
+                                </View>
+                            </Card>
+                        );
+                    })
+                }
             </ScrollView>
+        )
+    }
+
+    static playlistView (){
+        return(
+            <PlaylistView/>
         );
     }
 }

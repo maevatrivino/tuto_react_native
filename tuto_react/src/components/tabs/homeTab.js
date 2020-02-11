@@ -1,12 +1,24 @@
 import React, { Component } from 'react';
 import {Text, View, StyleSheet, Button} from "react-native";
 import * as NavigatorRef from '../../navigation/navigatorRef'
+import {getCurrentUser} from "../../utils/apiUtils";
+import { useFocusEffect } from '@react-navigation/native';
 import {getUserPlaylists} from '../../api/apiUtils'
 
-export default class HomeTab extends Component{
+async function getUser(){
+    let user = await getCurrentUser();
+    return user.display_name;
+}
 
-    static homeView (){
+
+export default class HomeTab extends Component{
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
         let username = NavigatorRef.getUsername();
+
         return(
             <View style={styleHome.container}>
                 <View style={styleHome.titleContainer}>
@@ -14,12 +26,19 @@ export default class HomeTab extends Component{
                 </View>
                 <View style={styleHome.buttonContainer}>
                     <Button
-                            onPress={null}
-                            title="Log out"
-                            color="#20D760"
+                        onPress={null}
+                        title="Log out"
+                        color="#20D760"
                     />
                 </View>
             </View>
+        )
+    }
+
+    static homeView (){
+
+        return(
+            <HomeTab/>
         );
     }
 }

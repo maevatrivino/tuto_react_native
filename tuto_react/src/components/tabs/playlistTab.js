@@ -1,12 +1,19 @@
 import React, { Component } from 'react';
-import {Text, View} from "react-native";
+import {Text, ScrollView, StyleSheet} from "react-native";
 
 export default class PlaylistView extends Component{
     static playlistView (){
         return(
-            <View>
+            <ScrollView style={stylePlaylist.container}>
                 <Text>PlaylistTabView</Text>
-            </View>
+            </ScrollView>
         );
     }
 }
+
+const stylePlaylist = StyleSheet.create({
+    container:{
+        paddingHorizontal: 10,
+        paddingVertical: 30
+    }
+});

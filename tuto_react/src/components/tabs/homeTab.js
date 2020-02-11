@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import {Text, View, StyleSheet, Button} from "react-native";
+import * as NavigatorRef from '../../navigation/navigatorRef'
 
 export default class HomeTab extends Component{
+
     static homeView (){
+        let username = NavigatorRef.getUsername();
         return(
             <View style={styleHome.container}>
                 <View style={styleHome.titleContainer}>
-                    {/*TODO get  username Spotify here*/}
-                    <Text style={styleHome.title}>Welcome ...</Text>
+                    <Text style={styleHome.title}>Welcome {username}</Text>
                 </View>
                 <View style={styleHome.buttonContainer}>
                     <Button

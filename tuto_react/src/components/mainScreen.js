@@ -27,24 +27,28 @@ function SearchView(){
 const Tab = createBottomTabNavigator();
 
 export default class MainScreen extends Component{
-    static mainScreen(){
-        return (
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return(
             <NavigationContainer independent={true}>
                 <Tab.Navigator screenOptions={({route}) => ({
-                        tabBarIcon: ({focused, color, size}) => {
-                            let iconName;
+                    tabBarIcon: ({focused, color, size}) => {
+                        let iconName;
 
-                            if(route.name === 'Home') {
-                                iconName = 'md-home';
-                            }else if(route.name === 'Playlist'){
-                                iconName = 'ios-list';
-                            }else if(route.name === 'Search'){
-                                iconName = 'md-search';
-                            }
+                        if(route.name === 'Home') {
+                            iconName = 'md-home';
+                        }else if(route.name === 'Playlist'){
+                            iconName = 'ios-list';
+                        }else if(route.name === 'Search'){
+                            iconName = 'md-search';
+                        }
 
-                            return <Ionicons name={iconName} size={size} color={color}/>;
-                        },
-                    })}
+                        return <Ionicons name={iconName} size={size} color={color}/>;
+                    },
+                })}
                                tabBarOptions={{
                                    activeTintColor: '#20D760',
                                    inactiveTintColor: 'gray',
@@ -55,6 +59,12 @@ export default class MainScreen extends Component{
                     <Tab.Screen name="Search" component={SearchView} />
                 </Tab.Navigator>
             </NavigationContainer>
+        )
+    }
+
+    static mainScreen(){
+        return (
+            <MainScreen/>
         );
     }
 }

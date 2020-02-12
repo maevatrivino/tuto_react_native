@@ -1,6 +1,6 @@
 import {AuthSession} from 'expo'
 import { encode as btoa } from 'base-64';
-import {storeData,retrieveData} from "./dataStore"
+import {storeData,retrieveData,clearData} from "./dataStore"
 import {spotifyCredentials} from './secret'
 
 const scopesArr = ['user-modify-playback-state','user-read-currently-playing','user-read-playback-state','user-library-modify',
@@ -168,3 +168,7 @@ export const checkAndRefreshTokens = async() =>
     }
     return true;
 } 
+
+export const logout = async() => {
+    await clearData();
+}

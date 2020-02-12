@@ -35,6 +35,11 @@ export default class LoginScreen extends Component
         super(props);
     }
 
+    componentDidMount()
+    {
+        LoginScreen.checkIfConnected();
+    }
+
     render() {
         return(
             <View style={styles.container}>
@@ -53,7 +58,6 @@ export default class LoginScreen extends Component
     }
 
     static loginScreenView () {
-        this.checkIfConnected();
         return(
             <LoginScreen/>
         );

@@ -34,12 +34,16 @@ function playlistsListParsing(object)
     //Mandatory checks
     if(object.items && Array.isArray(object.items) && object.items.length > 0)
     {
+        
         object.items.forEach(playlist => {
+       
+            console.log(playlist);
+            
             let newPlaylist = {
                 name: playlist.name,
                 id: playlist.id,
                 spotifyExternalUrl: playlist.external_urls.spotify,
-                imageUrl: playlist.images[0].url,
+                imageUrl: playlist.images !== undefined && playlist.images.length > 0 ? playlist.images[0].url : "https://developer.spotify.com/assets/branding-guidelines/icon3@2x.png",
                 trackCount: playlist.tracks.total,
             }
 

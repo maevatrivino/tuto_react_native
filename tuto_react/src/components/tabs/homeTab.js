@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import {Text, View, StyleSheet, Button} from "react-native";
 import * as NavigatorRef from '../../navigation/navigatorRef'
-import {getCurrentUser} from "../../utils/apiUtils";
-import { useFocusEffect } from '@react-navigation/native';
-import {getUserPlaylists} from '../../api/apiUtils'
+import {getCurrentUser} from '../../api/apiUtils'
 
 async function getUser(){
     let user = await getCurrentUser();
@@ -12,6 +10,7 @@ async function getUser(){
 
 
 export default class HomeTab extends Component{
+
     constructor(props) {
         super(props);
     }

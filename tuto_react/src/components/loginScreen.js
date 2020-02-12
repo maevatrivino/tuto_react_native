@@ -43,7 +43,7 @@ export default class LoginScreen extends Component
                 </View>
                 <View style={styles.buttonContainer}>
                     <Button
-                        onPress={LoginScreen._LoginToAPI()}
+                        onPress={LoginScreen._LoginToAPI}
                         title="Connect to Spotify"
                         color="#20D760"
                     />

@@ -1,28 +1,33 @@
 import React, { Component } from 'react';
 import {Text, ScrollView, StyleSheet, Image, View} from "react-native";
 import {Card, ListItem} from 'react-native-elements'
+import {getUserPlaylists} from "../../api/apiUtils";
 
-const playlists = [
-    {
-        name : 'Toad Party !',
-        source : 'https://vignette.wikia.nocookie.net/mario/images/3/38/CTTTChampignonD%27invincibilit%C3%A9.png/revision/latest?cb=20170322153140&path-prefix=fr'
-    },
-    {
-        name : 'Mario Party !',
-        source: 'https://upload.wikimedia.org/wikipedia/en/a/a9/MarioNSMBUDeluxe.png'
-    }
-];
 
 export default class PlaylistView extends Component{
     constructor(props) {
         super(props);
+        this.state = {
+            data: {
+                playlists:[]
+            }
+        }
+    }
+
+    async componentDidMount(){
+        let playlists = await getUserPlaylists();
+        console.log(playlists);
+        this.setState({
+            data:playlists
+        })
     }
 
     render() {
+        console.log(this.state);
         return(
             <ScrollView style={stylePlaylist.container}>
                 {
-                    playlists.map((playlist, i) =>{
+                    this.state.data.playlists.map((playlist, i) =>{
                         return(
                             <Card key={i}>
                                 <View style={stylePlaylist.cardContainer}>
@@ -30,7 +35,7 @@ export default class PlaylistView extends Component{
                                         <Image
                                             style={stylePlaylist.imageStyle}
                                             resizeMode="cover"
-                                            source={{ uri: playlist.source }}
+                                            source={{ uri: playlist.imageUrl }}
                                         />
                                     </View>
                                     <View style={stylePlaylist.infoPlaylistContainer}>
@@ -45,7 +50,8 @@ export default class PlaylistView extends Component{
         )
     }
 
-    static playlistView (){
+    static playlistView ()
+    {
         return(
             <PlaylistView/>
         );

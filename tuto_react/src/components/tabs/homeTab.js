@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {Text, View, StyleSheet, Button} from "react-native";
 import * as NavigatorRef from '../../navigation/navigatorRef'
 import {getCurrentUser} from '../../api/apiUtils'
+import {logout} from '../../utils/authUtils'
 
 async function getUser(){
     let user = await getCurrentUser();
@@ -15,6 +16,12 @@ export default class HomeTab extends Component{
         super(props);
     }
 
+    static logout = async() => {
+        await logout();
+        NavigatorRef.setUsername("");
+        NavigatorRef.replace('Login');
+    }
+
     render() {
         let username = NavigatorRef.getUsername();
 
@@ -25,7 +32,7 @@ export default class HomeTab extends Component{
                 </View>
                 <View style={styleHome.buttonContainer}>
                     <Button
-                        onPress={null}
+                        onPress={HomeTab.logout}
                         title="Log out"
                         color="#20D760"
                     />

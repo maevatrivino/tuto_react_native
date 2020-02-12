@@ -31,8 +31,11 @@ export default class LoginScreen extends Component
         //TODO ELSE ERROR
     }
 
-    static loginScreenView () {
-        this.checkIfConnected();
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
         return(
             <View style={styles.container}>
                 <View style={styles.titleContainer}>
@@ -40,12 +43,19 @@ export default class LoginScreen extends Component
                 </View>
                 <View style={styles.buttonContainer}>
                     <Button
-                        onPress={this._LoginToAPI}
+                        onPress={LoginScreen._LoginToAPI()}
                         title="Connect to Spotify"
                         color="#20D760"
                     />
                 </View>
             </View>
+        )
+    }
+
+    static loginScreenView () {
+        this.checkIfConnected();
+        return(
+            <LoginScreen/>
         );
     }
 }

@@ -12,7 +12,7 @@ export const getCurrentUser = async() =>
 export const getUserPlaylists = async() => 
 {
     const apiWrapper = await getAPIWrapper();
-    const apiResponse = await apiWrapper.getUserPlaylists({limit:5});
+    const apiResponse = await apiWrapper.getUserPlaylists();
 
     let parsingStrategy = getParsingStrategy(parsingTypes.PLAYLISTS_LIST);
 

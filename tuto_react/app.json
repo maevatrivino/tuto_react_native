@@ -4,6 +4,7 @@
     "slug": "tuto_react",
     "privacy": "public",
     "sdkVersion": "36.0.0",
+    "scheme":"myapp",
     "platforms": [
       "ios",
       "android",

@@ -22,11 +22,11 @@ export const search = async(query) =>
 {
     const apiWrapper = await getAPIWrapper();
 
-    const searchTypes = ["album","artist","playlist","track"];
+    const searchTypes = [/*"album","artist","playlist",*/"track"];
     const apiResponse = await apiWrapper.search(query,searchTypes);
     let parsingStrategy = getParsingStrategy(parsingTypes.SEARCH);
+    console.log(JSON.stringify(apiResponse));
     let returnObject = parsingStrategy(apiResponse);
-    console.log(JSON.stringify(returnObject));
     return returnObject;
 }
 

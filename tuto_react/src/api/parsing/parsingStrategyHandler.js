@@ -95,6 +95,7 @@ function searchParsing(object)
                 name: track.name,
                 mainArtist: track.artists[0].name,
                 imageUrl: track.album.images[0].url,
+                albumName:track.album.name,
                 id:track.id
             }
 

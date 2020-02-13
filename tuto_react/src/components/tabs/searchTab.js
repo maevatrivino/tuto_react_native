@@ -64,7 +64,7 @@ export default class SearchView extends Component{
                 </View>
                 <ScrollView style={styleSearch.containerList}>
                     {
-                        result.map((playlist, i) => {
+                        this.state.searchResult.tracks.map((track, i) => {
                             return (
                                 <Card key={i}>
                                     <View style={styleSearch.cardContainer}>
@@ -72,13 +72,13 @@ export default class SearchView extends Component{
                                             <Image
                                                 style={styleSearch.imageStyle}
                                                 resizeMode="cover"
-                                                source={{uri: playlist.source}}
+                                                source={{uri: track.imageUrl}}
                                             />
                                         </View>
                                         <View style={styleSearch.infoTrackContainer}>
-                                            <Text>Trackname : {playlist.trackName}</Text>
-                                            <Text>Artist : {playlist.artist}</Text>
-                                            <Text>Album : {playlist.album}</Text>
+                                            <Text>Trackname : {track.name}</Text>
+                                            <Text>Artist : {track.mainArtist}</Text>
+                                            <Text>Album : {track.albumName}</Text>
                                         </View>
                                     </View>
                                 </Card>

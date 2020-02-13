@@ -51,12 +51,8 @@ export default class LoginScreen extends Component
     async componentDidMount()
     {
         let code = window.location.search.substring(6);
-        console.log( window.location);
         if (code) {
             saveAuthorizationCode(code);
-
-            console.log("I'm in");
-
             const result = await refreshTokens();
 
             if(result)

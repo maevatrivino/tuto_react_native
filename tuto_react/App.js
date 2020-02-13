@@ -25,7 +25,6 @@ function MainScreen() {
 
 function App() {
   return (
-      //console.log(getSpotifyCredentials());
       <NavigationContainer ref={navigationRef}>
         <Stack.Navigator headerMode="none">
           <Stack.Screen name="Login" component={LoginScreen}/>

@@ -16,14 +16,12 @@ export default class PlaylistView extends Component{
 
     async componentDidMount(){
         let playlists = await getUserPlaylists();
-        console.log(playlists);
         this.setState({
             data:playlists
         });
     }
 
     render() {
-        // console.log(this.state);
         return(
             <ScrollView style={stylePlaylist.container}>
                 {

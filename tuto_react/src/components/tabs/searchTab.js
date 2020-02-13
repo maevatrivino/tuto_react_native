@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import {Text, ScrollView, StyleSheet, TextInput, View, Image} from "react-native";
+import {Text, ScrollView, StyleSheet, TextInput, View, Image,Button} from "react-native";
 import {Card} from "react-native-elements";
+import {search} from "../../api/apiUtils";
 
 const result = [
     {
@@ -22,7 +23,24 @@ export default class SearchView extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            textSearch: ""
+            textSearch: "",
+            searchResult:{
+                tracks : [],
+                albums : [],
+                artists: [],
+                playlists:[]
+            }
+        }
+        this.search = this.search.bind(this);
+    }
+
+    async search()
+    {
+        if(this.state.textSearch !== undefined && this.state.textSearch.length)
+        {
+            const query = this.state.textSearch;
+            let apiResponse = await search(query);
+            this.setState({textSearch:this.state.textSearch,searchResult:apiResponse});
         }
     }
 
@@ -33,13 +51,20 @@ export default class SearchView extends Component{
                     <TextInput
                         style={styleSearch.textInput}
                         placeholder="Search a song !"
-                        onChangeText={(textSearch) => this.setState({textSearch})}
+                        onChangeText={(text) => this.setState({textSearch:text})}
                         value={this.state.textSearch}
+                    />
+                </View>
+                <View style={styleSearch.buttonContainer}>
+                    <Button
+                        onPress={this.search}
+                        title="Search"
+                        color="#20D760"
                     />
                 </View>
                 <ScrollView style={styleSearch.containerList}>
                     {
-                        result.map((playlist, i) => {
+                        this.state.searchResult.tracks.map((track, i) => {
                             return (
                                 <Card key={i}>
                                     <View style={styleSearch.cardContainer}>
@@ -47,13 +72,13 @@ export default class SearchView extends Component{
                                             <Image
                                                 style={styleSearch.imageStyle}
                                                 resizeMode="cover"
-                                                source={{uri: playlist.source}}
+                                                source={{uri: track.imageUrl}}
                                             />
                                         </View>
                                         <View style={styleSearch.infoTrackContainer}>
-                                            <Text>Trackname : {playlist.trackName}</Text>
-                                            <Text>Artist : {playlist.artist}</Text>
-                                            <Text>Album : {playlist.album}</Text>
+                                            <Text>Trackname : {track.name}</Text>
+                                            <Text>Artist : {track.mainArtist}</Text>
+                                            <Text>Album : {track.albumName}</Text>
                                         </View>
                                     </View>
                                 </Card>
@@ -105,4 +130,10 @@ const styleSearch = StyleSheet.create({
         marginBottom: 10,
         marginTop: 20
     },
+    buttonContainer: {
+        marginLeft: 50,
+        marginRight: 50,
+        marginTop: 20,
+        marginBottom: 20
+    }
 });

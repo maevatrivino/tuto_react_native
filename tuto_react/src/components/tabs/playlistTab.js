@@ -19,7 +19,7 @@ export default class PlaylistView extends Component{
         console.log(playlists);
         this.setState({
             data:playlists
-        })
+        });
     }
 
     render() {

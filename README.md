@@ -317,7 +317,7 @@ Le style est à votre discrétion pour la suite du tutoriel, le code source four
 
 Cette fois, nous allons créer un dernier onglet de recherche de chansons, intitulé *searchTab.js* dans le le dossier *tabs*. La aussi, implémentez un composant avec un render vide.
 
-La différence avec la vue précédente, c'est d'ajouter un *TextInput* comme barre de recherche et de changer quelque peu la liste de retour de la recherche.
+La différence avec la vue précédente, c'est d'ajouter un *TextInput* comme barre de recherche et de changer quelque peu la liste de retour de la recherche. Nous allons aussi placer un bouton pour lancer la recherche, pour plus de facilité de traitement, à placer hors de la  *ScrollView* par vos soins.
 
 Pour ajouter un *TextInput*, nous avons besoin d'utiliser la variable *state* du composant React, qui permet d'être stockée et d'être modifiée en temps réel, pendant que la vue est affichée. Le constructeur du composant sera donc implémenté de la sorte : 
 

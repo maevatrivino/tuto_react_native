@@ -57,8 +57,6 @@ const getTokens = async () =>
     const authorizationCode = await getAuthorizationCode();
     const credentials = getSpotifyCredentials();
 
-    console.log(authorizationCode);
-
     //Encode the credentials to base64 and sends tge request to the account API
     const credsB64 = btoa(`${credentials.clientId}:${credentials.clientSecret}`);
     const response = await fetch('https://accounts.spotify.com/api/token', {
@@ -114,7 +112,6 @@ export const refreshTokens = async () => {
 
         if (responseJson.error) 
         {
-            console.log("GO GET TOKENS");
             await getTokens();
         } 
         else 

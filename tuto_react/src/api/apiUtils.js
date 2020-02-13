@@ -25,7 +25,6 @@ export const search = async(query) =>
     const searchTypes = [/*"album","artist","playlist",*/"track"];
     const apiResponse = await apiWrapper.search(query,searchTypes);
     let parsingStrategy = getParsingStrategy(parsingTypes.SEARCH);
-    console.log(JSON.stringify(apiResponse));
     let returnObject = parsingStrategy(apiResponse);
     return returnObject;
 }

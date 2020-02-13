@@ -46,7 +46,7 @@ export default class SearchView extends Component{
 
     render() {
         return(
-            <View style={styleSearch.container}>
+            <ScrollView style={styleSearch.container}>
                 <View style={styleSearch.textInputContainer}>
                     <TextInput
                         style={styleSearch.textInput}
@@ -62,7 +62,6 @@ export default class SearchView extends Component{
                         color="#20D760"
                     />
                 </View>
-                <ScrollView style={styleSearch.containerList}>
                     {
                         this.state.searchResult.tracks.map((track, i) => {
                             return (
@@ -85,8 +84,7 @@ export default class SearchView extends Component{
                             );
                         })
                     }
-                </ScrollView>
-            </View>
+            </ScrollView>
         )
     }
 

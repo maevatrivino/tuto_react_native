@@ -33,7 +33,7 @@ export default class SearchView extends Component{
                     <TextInput
                         style={styleSearch.textInput}
                         placeholder="Search a song !"
-                        onChangeText={(text) => this.setState({text})}
+                        onChangeText={(textSearch) => this.setState({textSearch})}
                         value={this.state.textSearch}
                     />
                 </View>

@@ -335,7 +335,7 @@ Dans la vue, avant le *ScrollView*, nousa allons ajouter le *TextInput* :
 	<TextInput
  		style={styleSearch.textInput}
 		placeholder="Search a song !"
-        onChangeText={(text) => this.setState({text})}
+        onChangeText={(textSearch) => this.setState({textSearch})}
         value={this.state.textSearch}
 	/>
 </View>

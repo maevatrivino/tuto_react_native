@@ -1,14 +1,7 @@
 import React, { Component } from 'react';
 import {Text, View, StyleSheet, Button} from "react-native";
 import * as NavigatorRef from '../../navigation/navigatorRef'
-import {getCurrentUser} from '../../api/apiUtils'
 import {logout} from '../../utils/authUtils'
-
-async function getUser(){
-    let user = await getCurrentUser();
-    return user.display_name;
-}
-
 
 export default class HomeTab extends Component{
 

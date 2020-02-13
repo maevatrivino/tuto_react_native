@@ -62,7 +62,7 @@ export default class MainScreen extends Component{
         )
     }
 
-    static mainScreen(){
+    static mainScreenView(){
         return (
             <MainScreen/>
         );

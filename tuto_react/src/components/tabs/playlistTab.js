@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Text, ScrollView, StyleSheet, Image, View} from "react-native";
-import {Card, ListItem} from 'react-native-elements'
+import {Card} from 'react-native-elements'
 import {getUserPlaylists} from "../../api/apiUtils";
 
 
@@ -23,7 +23,7 @@ export default class PlaylistView extends Component{
     }
 
     render() {
-        console.log(this.state);
+        // console.log(this.state);
         return(
             <ScrollView style={stylePlaylist.container}>
                 {

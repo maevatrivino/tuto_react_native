@@ -19,7 +19,7 @@ function LoginScreen() {
 
 function MainScreen() {
     return (
-        mainScreen.mainScreen()
+        mainScreen.mainScreenView()
     );
 }
 

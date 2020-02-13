@@ -13,7 +13,7 @@ Pour installer Visual Studio Code, télécharger l'environnement de développeme
 
 Pour installer NodeJS, vous pouvez le faire ici : https://nodejs.org/en/ (version LTS recommandée).
 
-Une fois que ces outils sont installés, se rendre dans un terminal de commande ou powershell et lancer la commande suivante : *npm install -g expo-cli*. Maintenant, vous avez donc expo et vous êtes en mesure de crééer votre premier projet React / React Native. Pour créer ce projet, rendez-vous au dossier dans le terminal où vous souhaitez stocker ce projet (avec la commande *cd dossier*) et lancer la commande suivante : *expo init projetName* et choisir un projet *blank* (les flèches directionnelles pour changer de mode et *entrée* pour valider votre choix). Ce rendre ensuite dans le dossier du projet avec *cd projectName* puis lancer les commandes suivantes : *npm install* puis *npm start*.
+Une fois que ces outils sont installés, se rendre dans un terminal de commande ou powershell et lancer la commande suivante : *npm install -g expo-cli*. Maintenant, vous avez donc expo et vous êtes en mesure de créer votre premier projet React / React Native. Pour créer ce projet, rendez-vous au dossier dans le terminal où vous souhaitez stocker ce projet (avec la commande *cd dossier*) et lancer la commande suivante : *expo init projetName* et choisir un projet *blank* (les flèches directionnelles pour changer de mode et *entrée* pour valider votre choix). Ce rendre ensuite dans le dossier du projet avec *cd projectName* puis lancer les commandes suivantes : *npm install* puis *npm start*.
 
 Un onglet internet va s'ouvrir avec les logs de l'application. Sur la partie gauche, cliquez sur *local* au dessus du QR Code, puis ouvrir votre application sur l'environnement de votre choix (web, IOS, Android). Attention, pour ouvrir sous Android, il faut soit possèder un émulateur sur sa machine, soit brancher son device Android sur son ordinateur. Dans le deuxième cas, veillez à débloquer le débogage USB dans les paramètres développeur du device (aide : https://www.frandroid.com/comment-faire/tutoriaux/229753_questcequelemodedebogageusb).
 
@@ -25,9 +25,9 @@ En ce rendant dans votre environnement de développement, vous allez pouvoir obs
 
 On peut constater qu'aucun dossier de sources est créé. Nous vous recommandons dès à présent de créer un dossier *src* pour stocker vos scripts. Ceux-ci seront en javascript.
 
-Le fichier *package.json* stocke toutes les dépendances du projet ainsi que leur version. En effet, il est possible d'utiliser npm pour installer des dépendances utiles au projet (des éléments pour le front-end, des API, etc). Utilisez la commande pour installer le paquet fourni par le développeur dans le dossier du projet à l'aide d'un terminal de commande. Sa référence sera automatiquement ajouté au fichier *package.json*. Ensuite, les dépendances sont téléchargés dans le dossier *nodes-modules* du projet. Bien évidement, si vous souhaitez partager votre projet, il est inutile de partager le dossier *nodes-modules* ; ce dossier est très volumineux. Partagez uniquement le fichier *package.json*. Le nouvel utilisateur du projet aura simplement a appliquer la commande *npm install* dans le dossier du projet pour installer toutes les dépendances. Si vous n'avez pas de .gitignore et que vous utilisez git, pensez à en ajouter un adapté pour Node. Cela vous évitera de mettre sur votre dépôt ce dossier.
+Le fichier *package.json* stocke toutes les dépendances du projet ainsi que leur version. En effet, il est possible d'utiliser npm pour installer des dépendances utiles au projet (des éléments pour le front-end, des API, etc). Utilisez la commande pour installer le paquet fourni par le développeur dans le dossier du projet à l'aide d'un terminal de commande. Sa référence sera automatiquement ajouté au fichier *package.json*. Ensuite, les dépendances sont téléchargés dans le dossier *nodes-modules* du projet. Bien évidement, si vous souhaitez partager votre projet, il est inutile de partager le dossier *nodes-modules* ; ce dossier est très volumineux. Partagez uniquement le fichier *package.json*. Le nouvel utilisateur du projet aura simplement a appliquer la commande *npm install* dans le dossier du projet pour installer toutes les dépendances. Si vous n'avez pas de .gitignore et que vous utilisez git, pensez à en ajouter un adapté pour Node. Cela vous évitera de mettre des éléments trop volumineux et téléchargeable en local sur votre dépôt.
 
-Le fichier *App.js* est le point d'entrée de l'application. C'est la première vue de l'application. Ce sera donc ici qu'on l'on aura a initer nos outils.
+Le fichier *App.js* est le point d'entrée de l'application. C'est la première vue de l'application. Ce sera donc ici qu'on l'on aura à initer nos outils.
 
 ## IV. Mise en place du Front-end
 
@@ -35,9 +35,10 @@ Dans le dossier *src* créé précédement, nous allons créé un dossier *compo
 
 ### IV.I. La vue d'accueil
 
-La vue d'accueil va contenir un message et un bouton pour se connecter à l'API Spotify. Nous allons donc créer dans le *components*, un fichier javascript intitulé *loginScreen.js*.
+La vue d'accueil va contenir un message et un bouton pour se connecter à l'API Spotify. Nous allons donc créer dans le dossier *components*, un fichier javascript intitulé *loginScreen.js*.
 
 Pour avoir la possibilité d'afficher une vue, il faut définir une classe étendue à un composant React : 
+
 ```
 import React, { Component } from 'react';
 
@@ -97,7 +98,7 @@ static _LoginToAPI()
 }
 ```
 
-Pour appliquer du style sur des éléments, on utilise le paramètre style dans les balises. On pourrait simplement écrire le style dans la balise mais pour plus de propreté, nous allons créer une constante de style et appliquer ses éléments à nos balises. Pour appliquer du style, cela fonctionne sous la même logique que du css, certains paramètres et leur utilisation peuvent être légèrement différent mais ressemble en grande partie. Placez cette constante en dehors du composant : 
+Pour appliquer du style sur des éléments, on utilise le paramètre *style* dans les balises. On pourrait simplement écrire le style dans la balise mais pour plus de propreté, nous allons créer une constante de style et appliquer ses éléments à nos balises. Pour appliquer du style, cela fonctionne sous la même logique que du css, certains paramètres et leur utilisation peuvent être légèrement différent mais ressemble en grande partie. Placez cette constante en dehors du composant : 
 
 ```
 const styles = StyleSheet.create({
@@ -142,7 +143,7 @@ render() {
 }
 ```
 
-Pour lancer l'affichage de cette vue à l'extérieur du composant, il faut créer une méthode statique dans le composant et contruire le composant. Pour cela, il suffit simplement de l'appeler avec une balise. Le nom de celle-ci est celle du composant, dans notre cas *LoginScreen* : 
+Pour lancer l'affichage de cette vue à l'extérieur du composant, il faut créer une méthode statique dans le composant pour le construire. Pour cela, il suffit simplement de l'appeler avec une balise. Le nom de celle-ci est celle du composant, dans notre cas *LoginScreen* : 
 
 ```
 static loginScreenView () {
@@ -156,7 +157,7 @@ Cette méthode statique, du moment qu'elle est définie dans le composant, pourr
 
 ### IV.II. La vue principale
 
-Une fois connecté à l'API Spotify, il faudra avoir une vue principale. Vous pouvez donc crééer un nouveau fichier dans le dossier *components* intitulé *mainScreen.js*.
+Une fois connecté à l'API Spotify, il faudra avoir une vue principale. Vous pouvez donc créer un nouveau fichier dans le dossier *components* intitulé *mainScreen.js*.
 
 Vous pouvez définir un composant tel que le menu d'accueil avec un texte et un bouton de déconnexion. Vous pouvez aussi définir votre style et pensez à créer une méthode statique dans le composant intulé *mainScreenView* pour avoir construire cette vue dans un autre composant.
 
@@ -164,7 +165,7 @@ Vous pouvez définir un composant tel que le menu d'accueil avec un texte et un 
 
 #### IV.III.I. Définir le système de navigation
 
-Pour naviguer entre les écrans, nous allons utiliser *React Navigation*. Pour l'installer, ouvrez le terminal de commande à la racine du projet et appliquez cette commande : *npm install @react-navigation/native*, puis celle-ci *expo install react-native-gesture-handler react-native-reanimated react-native-screens react-native-safe-area-context @react-native-community/masked-view*. Ces dépendances permet d'utiliser un système de navigation entre les écrans.
+Pour naviguer entre les écrans, nous allons utiliser *React Navigation*. Pour l'installer, ouvrez le terminal de commande à la racine du projet et appliquez cette commande : *npm install @react-navigation/native*, puis celle-ci : *expo install react-native-gesture-handler react-native-reanimated react-native-screens react-native-safe-area-context @react-native-community/masked-view*. Ces dépendances permet d'utiliser un système de navigation entre les écrans.
 
 Notre premier système de navigation va être intégrer dans le fichier *App.js* à la racine du projet : 
 
@@ -206,11 +207,11 @@ function App() {
 export default App;
 ```
 
-Le premier import est essentiel pour utiliser React Navigation. Ensuite, il faut définir une constante stackNavigator. Dans la fonction App(), on défini ce navigateur. Tout d'abord, on applique un container pour notre navigateur. Ensuite, dans le stack que l'on a défini, on répertorie les écrans avec lequel on veut naviguer. On donne un nom et on spécifie une méthode qui devra renvoyer une vue. On va donc définir des fonctions qui retournent les fonctions statiques que l'on a défini dans les composants.
+Le premier import est essentiel pour utiliser React Navigation. Ensuite, il faut définir une constante *stackNavigator*. Dans la fonction App(), on défini ce navigateur. Tout d'abord, on applique un container pour notre navigateur. Ensuite, dans le stack que l'on a défini, on répertorie les écrans avec lequel on veut naviguer. On donne un nom et on spécifie une méthode qui devra renvoyer une vue. On va donc définir des fonctions qui retournent les fonctions statiques que l'on a défini dans les composants.
 
 #### IV.III.II. Changer d'écran dans un autre composant
 
-Il est possible de changer de composant dans un autre écran si l'on a la référence du navigateur (la référence est déjà placé sur le container de dans *App.js*). Il suffit de placer une référence sur le container de navigation. Cette référence va pointer sur un fichier javascript dans un dossier *navigation* dans le dossier *src* intitulé *navigatorRef.js* : 
+Il est possible de changer de composant dans un autre écran si l'on a la référence du navigateur (la référence est déjà placé sur le container dans *App.js*). Il suffit de placer une référence sur le container de navigation. Cette référence va pointer sur un fichier javascript dans un dossier *navigation* dans le dossier *src* intitulé *navigatorRef.js* : 
 
 ```
 import { StackActions } from '@react-navigation/routers';
@@ -231,7 +232,8 @@ export function replace(name, params){
 Définir ces fonctions permet d'utiliser les fonctions de navigation de notre navigateur dans n'importe quel composant : 
 - La méthode *navigate* permet de changer d'écran avec la possibilité de retourner à l'écran précédant.
 - La méthode *replace* permet de ne pas pouvoir retourner à l'écran précédant.
-Dns le cas d'une connexion à un compte, il est intéressant de bloquer le retour à l'écran précédant.
+
+Dans le cas d'une connexion à un compte, il est intéressant de bloquer le retour à l'écran précédant.
  
 Il faut impérativement préciser le *export* dans la définition de la fonction pour qu'elle soit utilisable dans n'importe quel composant.
 
@@ -241,7 +243,7 @@ Pour utiliser cette référence, nous allons placer une redirection au moment o�
 import * as NavigatorRef from '../navigation/navigatorRef'
 ```
 
-On peut donc assez facilement, dans la méthode *_LoginToAPI*, la méthode *replace* de la référence : 
+On peut donc assez facilement, dans la méthode *_LoginToAPI*, utiliser la méthode *replace* de la référence : 
 
 ```
 NavigatorRef.replace('Home');
@@ -261,7 +263,7 @@ Pour cet onglet principal, créez un fichier dans le dossier *tabs* intitulé *h
 
 Pour afficher les playlists, implémentez un composant avec une vue vide intitulé *playlistTab.js* dans le dossier *tab*. Pour afficher les playlists nous allons utiliser une *ScrollView* et des cartes dans *React Native Elements*. Pour installer cette dépendance, dans une terminal de commandes à la racine du projet, faites la commande suivante : *npm install react-native-elements*. 
 
-Pour tester l'affichage de nos cartes, nous allons créer une constante à l'extérieur du composant pour répertorier les différentes playlists : 
+Pour tester l'affichage de nos cartes (puisque nous n'avons encore pas de connexion à l'API), nous allons créer une constante à l'extérieur du composant pour répertorier les différentes playlists : 
 
 ```
 const playlists = [
@@ -307,7 +309,7 @@ render() {
 }
 ```
 
-Dans le *ScrollView*, on effectue un map sur la variable *playlists* pour créer une carte pour chaque éléments de la liste. Chaque élément va pouvoir être récupéré ainsi qu'une clé unique pour l'identifier facilement. On applique cette clé à chaque carte. On implémente ensuite une image et le titre de la playlist. 
+Dans le *ScrollView*, on effectue un *map* sur la variable *playlists* pour créer une carte pour chaque éléments de la liste. Chaque élément va pouvoir être récupéré ainsi qu'une clé unique pour l'identifier facilement. On applique cette clé à chaque carte. On implémente ensuite une image et le titre de la playlist. 
 
 Le style est à votre discrétion pour la suite du tutoriel, le code source fourni peut vous donner un exemple d'implémentation.
 
@@ -317,7 +319,7 @@ Cette fois, nous allons créer un dernier onglet de recherche de chansons, intit
 
 La différence avec la vue précédente, c'est d'ajouter un *TextInput* comme barre de recherche et de changer quelque peu la liste de retour de la recherche.
 
-Pour ajouter un *TextInput*, nous avons besoin d'utiliser la variable *state* du composant React, qui permet d'enregistrer et d'être modifiée en temps réel, pendant que la vue est affichée. Le constructeur du composant sera donc implémenté de la sorte : 
+Pour ajouter un *TextInput*, nous avons besoin d'utiliser la variable *state* du composant React, qui permet d'être stockée et d'être modifiée en temps réel, pendant que la vue est affichée. Le constructeur du composant sera donc implémenté de la sorte : 
 
 ```
 constructor(props) {
@@ -341,7 +343,7 @@ Dans la vue, avant le *ScrollView*, nousa allons ajouter le *TextInput* :
 </View>
 ```
 
-Ici, lorsque l'input est modifié, on adapté la variable state pour stocker le résultat en temps réel.
+Ici, lorsque l'input est modifié, on adapte la variable *state* pour stocker le résultat en temps réel.
 
 Pour implémenter les cartes, inspirez vous du code du onglet précedant tous en prenant soin de s'adapter à ce type de résultat : 
 
@@ -364,7 +366,7 @@ const result = [
 
 #### IV.IV.IV. Navigateur de la vue principale
 
-Dans le fichier *mainScreen.js*, nous allons implémenté dans la vue uniquement un nouveau navigateur. En enffet, nous allons implémenter un navigateur sous un système de bar avec des onglets.
+Dans le fichier *mainScreen.js*, nous allons implémenter dans la vue uniquement un nouveau navigateur. En effet, nous allons implémenter celui-ci sous un système de barre avec des onglets.
 
 Dans un premier temps, il faut créer la variable du navigateur en dehors du composant : 
 
@@ -372,7 +374,7 @@ Dans un premier temps, il faut créer la variable du navigateur en dehors du com
 const Tab = createBottomTabNavigator();
 ```
 
-La navigateur contiendra des icônes et dans notre cas, nous allons utiliser *vector-icons* de expo. Cette dépendance contient de nombreux icônes de différentes plateformes gratuites. Pour l'installer , ouvrez un terminale de commande à la racine du projet et lancez : *npm i @expo/vector-icons*. Pour cet exemple, nous allons s'orienter sur les icons *Iosicons*. Il suffit de placer cet import dans le fichier javascript : 
+La navigateur contiendra des icônes et dans notre cas, nous allons utiliser *vector-icons* de expo. Cette dépendance contient de nombreux icônes de différentes plateformes gratuites. Pour l'installer , ouvrez un terminal de commandes à la racine du projet et lancez : *npm i @expo/vector-icons*. Pour cet exemple, nous allons s'orienter sur les icons *Iosicons*. Il suffit de placer cet import dans le fichier javascript : 
 
 ```
 import { Ionicons } from '@expo/vector-icons';
@@ -413,7 +415,7 @@ render() {
 }
 ```
 
-Sous le même principe que le premier navigateur, on répertorie les différentes vues dans lequelles on pourra naviguer. Il nous faut aussi spécifier des icônes pour chaque onglet, ce que l'on fait dans le paramètre *tabBarIcon* de la balise *Tab.Navigator*. On défini aussi un comportement du navigateur pour nous indiquer l'onglet dans lequel nous sommes dans le paramètre *tabBarOptions*. Comme dans l'exemple du premier navigateur, pensez à créer les fonctions qui vont appeler les vues des onglets que l'on a créé précédement.
+Sous le même principe que le premier navigateur, on répertorie les différentes vues dans lequelles on pourra naviguer. Il nous faut aussi spécifier des icônes pour chaque onglet, ce que l'on fait dans le paramètre *tabBarIcon* de la balise *Tab.Navigator*. On défini aussi un comportement du navigateur pour nous indiquer l'onglet dans lequel nous sommes, dans le paramètre *tabBarOptions*. Comme dans l'exemple du premier navigateur, pensez à créer les fonctions qui vont appeler les vues des onglets que l'on a créé précédement.
 
 Attention, il ne peut normalement avoir qu'un navigateur par application. Pour spécifier à l'application qu'il faut remplacer le navigateur du *App.js* par celui-ci, nous devons ajouter le paramètre *independent={true}* à la balise *NavigationContainer*.
 

@@ -3,11 +3,13 @@
 
 *Tutoriel de présentation de React et React Native à travers une API Spotify*
 
-## I. Outils nécéssaires
+## I. Histoire de React / React Native et but du tutoriel
+
+## II. Outils nécéssaires
 
 Dans ce tutoriel, réalisé sous Windows, nous allons avoir besoin de NodeJS, un environnement de développement, par exemple Visual Studio Code, qui est gratuit, et expo. Ce dernier s'installe grâce à npm, installé depuis NodeJS.
 
-## II. Installation des outils
+## III. Installation des outils
 
 Pour installer Visual Studio Code, télécharger l'environnement de développement ici : https://code.visualstudio.com/Download .
 
@@ -19,7 +21,7 @@ Un onglet internet va s'ouvrir avec les logs de l'application. Sur la partie gau
 
 Lancez le projet, par exemple, dans le navigateur internet, et vous pouvez constater le démarrage de votre première application React Native.
 
-## III. Arborescence du projet
+## IV. Arborescence du projet
 
 En ce rendant dans votre environnement de développement, vous allez pouvoir observer l'arborescence du projet.
 
@@ -29,11 +31,11 @@ Le fichier *package.json* stocke toutes les dépendances du projet ainsi que leu
 
 Le fichier *App.js* est le point d'entrée de l'application. C'est la première vue de l'application. Ce sera donc ici qu'on l'on aura à initer nos outils.
 
-## IV. Mise en place du Front-end
+## V. Mise en place du Front-end
 
 Dans le dossier *src* créé précédement, nous allons créé un dossier *components* pour stocker nos vues. L'idée est de faire un fichier par écran.
 
-### IV.I. La vue d'accueil
+### V.I. La vue d'accueil
 
 La vue d'accueil va contenir un message et un bouton pour se connecter à l'API Spotify. Nous allons donc créer dans le dossier *components*, un fichier javascript intitulé *loginScreen.js*.
 
@@ -155,15 +157,15 @@ static loginScreenView () {
 
 Cette méthode statique, du moment qu'elle est définie dans le composant, pourra être appelé dans un autre composant.
 
-### IV.II. La vue principale
+### V.II. La vue principale
 
 Une fois connecté à l'API Spotify, il faudra avoir une vue principale. Vous pouvez donc créer un nouveau fichier dans le dossier *components* intitulé *mainScreen.js*.
 
 Vous pouvez définir un composant tel que le menu d'accueil avec un texte et un bouton de déconnexion. Vous pouvez aussi définir votre style et pensez à créer une méthode statique dans le composant intulé *mainScreenView* pour avoir construire cette vue dans un autre composant.
 
-### IV.III. Naviguer entre les écrans
+### V.III. Naviguer entre les écrans
 
-#### IV.III.I. Définir le système de navigation
+#### V.III.I. Définir le système de navigation
 
 Pour naviguer entre les écrans, nous allons utiliser *React Navigation*. Pour l'installer, ouvrez le terminal de commande à la racine du projet et appliquez cette commande : *npm install @react-navigation/native*, puis celle-ci : *expo install react-native-gesture-handler react-native-reanimated react-native-screens react-native-safe-area-context @react-native-community/masked-view*. Ces dépendances permet d'utiliser un système de navigation entre les écrans.
 
@@ -209,7 +211,7 @@ export default App;
 
 Le premier import est essentiel pour utiliser React Navigation. Ensuite, il faut définir une constante *stackNavigator*. Dans la fonction App(), on défini ce navigateur. Tout d'abord, on applique un container pour notre navigateur. Ensuite, dans le stack que l'on a défini, on répertorie les écrans avec lequel on veut naviguer. On donne un nom et on spécifie une méthode qui devra renvoyer une vue. On va donc définir des fonctions qui retournent les fonctions statiques que l'on a défini dans les composants.
 
-#### IV.III.II. Changer d'écran dans un autre composant
+#### V.III.II. Changer d'écran dans un autre composant
 
 Il est possible de changer de composant dans un autre écran si l'on a la référence du navigateur (la référence est déjà placé sur le container dans *App.js*). Il suffit de placer une référence sur le container de navigation. Cette référence va pointer sur un fichier javascript dans un dossier *navigation* dans le dossier *src* intitulé *navigatorRef.js* : 
 
@@ -251,15 +253,15 @@ NavigatorRef.replace('Home');
 
 En appuyant sur le bouton de connexion, vous allez être capable de naviguer à votre écran d'accueil.
 
-### IV.IV. Création d'onglets à la vue principale
+### V.IV. Création d'onglets à la vue principale
 
 Vous allez, pour commencer, créez un dossier *tabs* dans le dossier *components*, pour stocker les écrans des onglets.
 
-#### IV.IV.I. Onglet principal
+#### V.IV.I. Onglet principal
 
 Pour cet onglet principal, créez un fichier dans le dossier *tabs* intitulé *homeTab.js*. Implémentez un composant *HomeTab* sous les exemples des composants créés précedement. Vous pouvez reprendre la vue créée dans *mainScreen* et supprimer sa vue (et non son composant), puisque nous placerons un nouveau navigateur dans cette dernière.
 
-#### IV.IV.II. Onglet Playlists
+#### V.IV.II. Onglet Playlists
 
 Pour afficher les playlists, implémentez un composant avec une vue vide intitulé *playlistTab.js* dans le dossier *tab*. Pour afficher les playlists nous allons utiliser une *ScrollView* et des cartes dans *React Native Elements*. Pour installer cette dépendance, dans une terminal de commandes à la racine du projet, faites la commande suivante : *npm install react-native-elements*. 
 
@@ -313,7 +315,7 @@ Dans le *ScrollView*, on effectue un *map* sur la variable *playlists* pour cré
 
 Le style est à votre discrétion pour la suite du tutoriel, le code source fourni peut vous donner un exemple d'implémentation.
 
-#### IV.IV.III. Onglets Recherche
+#### V.IV.III. Onglets Recherche
 
 Cette fois, nous allons créer un dernier onglet de recherche de chansons, intitulé *searchTab.js* dans le le dossier *tabs*. La aussi, implémentez un composant avec un render vide.
 
@@ -364,7 +366,7 @@ const result = [
 ];
 ```
 
-#### IV.IV.IV. Navigateur de la vue principale
+#### V.IV.IV. Navigateur de la vue principale
 
 Dans le fichier *mainScreen.js*, nous allons implémenter dans la vue uniquement un nouveau navigateur. En effet, nous allons implémenter celui-ci sous un système de barre avec des onglets.
 
@@ -419,7 +421,7 @@ Sous le même principe que le premier navigateur, on répertorie les différente
 
 Attention, il ne peut normalement avoir qu'un navigateur par application. Pour spécifier à l'application qu'il faut remplacer le navigateur du *App.js* par celui-ci, nous devons ajouter le paramètre *independent={true}* à la balise *NavigationContainer*.
 
-### IV.V. Conclusion
+### V.V. Conclusion
 
 A travers cet exemple, nous avons pu être en mesure de vous donner quelques bases sous React et React Native. Nous allons ensuite implémenter l'utilisation de l'API et l'intégrer à ce front-end.
 

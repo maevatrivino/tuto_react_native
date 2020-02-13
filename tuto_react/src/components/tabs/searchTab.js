@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {Text, ScrollView, StyleSheet, TextInput, View, Image} from "react-native";
-import {render} from "react-native-web";
 import {Card} from "react-native-elements";
 
 const result = [

@@ -2,26 +2,34 @@ import React, { Component } from 'react';
 import {Text, View, StyleSheet, Button} from "react-native";
 import * as NavigatorRef from '../../navigation/navigatorRef'
 import {logout} from '../../utils/authUtils'
+import {getCurrentUser} from "../../api/apiUtils";
 
 export default class HomeTab extends Component{
 
     constructor(props) {
         super(props);
+        this.state = {
+            username : ""
+        }
     }
 
     static logout = async() => {
         await logout();
-        NavigatorRef.setUsername("");
         NavigatorRef.replace('Login');
     }
 
-    render() {
-        let username = NavigatorRef.getUsername();
+    async componentDidMount(){
+        let user = await getCurrentUser();
+        this.setState({
+            username: user.display_name
+        });
+    }
 
+    render() {
         return(
             <View style={styleHome.container}>
                 <View style={styleHome.titleContainer}>
-                    <Text style={styleHome.title}>Welcome {username}</Text>
+                    <Text style={styleHome.title}>Welcome {this.state.username}</Text>
                 </View>
                 <View style={styleHome.buttonContainer}>
                     <Button

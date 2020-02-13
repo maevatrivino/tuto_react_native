@@ -3,17 +3,6 @@ import { StackActions } from '@react-navigation/routers';
 
 export const navigationRef = React.createRef();
 
-let username;
-
-export function setUsername(name){
-    username = name;
-}
-
-export function getUsername(){
-    return username;
-}
-
-
 export function navigate(name, params) {
     navigationRef.current?.navigate(name, params);
 }

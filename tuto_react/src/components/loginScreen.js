@@ -22,8 +22,6 @@ export default class LoginScreen extends Component
         if(await isAlreadyConnected())
         {
 			await checkAndRefreshTokens();
-            let user = await getCurrentUser();
-            NavigatorRef.setUsername(user.display_name);
             NavigatorRef.replace('Home');
         } 
     }
@@ -36,8 +34,6 @@ export default class LoginScreen extends Component
 
         if(result)
         {
-            let user = await getCurrentUser();
-            NavigatorRef.setUsername(user.display_name);
             NavigatorRef.replace('Home');
         }*/
 
@@ -58,7 +54,6 @@ export default class LoginScreen extends Component
             if(result)
             {
                 let user = await getCurrentUser();
-                NavigatorRef.setUsername(user.display_name);
                 NavigatorRef.replace('Home');
             }
             LoginScreen.checkIfConnected();

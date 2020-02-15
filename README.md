@@ -463,13 +463,25 @@ Attention, il ne peut normalement avoir qu'un navigateur par application. Pour s
 
 A travers cet exemple, nous avons pu être en mesure de vous donner quelques bases sous React et React Native. Nous allons ensuite implémenter l'utilisation de l'API et l'intégrer à ce front-end.
 
+## VI. :alien: L'API Spotify
 
+Résumé de l'api spotify, résumé des différents points d'entrée que l'on va utiliser, le process d'authetification sur le papier
 
+## Création du storage 
 
+Présentation AsyncStorage et création du dataStore
 
+## Connexion à l'API 
 
+Initialisation d'expo auth, setup de l'app sur dev, remplissage du secret.native.js
 
+## Utilisation de l'API 
 
+Présentation du wrapper et des différents points d'accès, plus le parsing
 
+## Adaptation au web 
 
+Adaptation du storage
+Adaptation du process de auth 
+Création du nouveau secret 
 

@@ -400,25 +400,29 @@ const result = [
 ];
 ```
 
-#### V.IV.IV. Navigateur de la vue principale
+#### V.IV.IV. :anchor: Navigateur de la vue principale
 
-Dans le fichier *mainScreen.js*, nous allons implémenter dans la vue uniquement un nouveau navigateur. En effet, nous allons implémenter celui-ci sous un système de barre avec des onglets.
+Dans le fichier ***mainScreen.js***, nous allons implémenter dans la vue uniquement un nouveau navigateur. En effet, nous allons implémenter celui-ci sous un système de barre avec des onglets.
 
 Dans un premier temps, il faut créer la variable du navigateur en dehors du composant : 
 
-```
+```js
 const Tab = createBottomTabNavigator();
 ```
 
-La navigateur contiendra des icônes et dans notre cas, nous allons utiliser *vector-icons* de expo. Cette dépendance contient de nombreux icônes de différentes plateformes gratuites. Pour l'installer , ouvrez un terminal de commandes à la racine du projet et lancez : *npm i @expo/vector-icons*. Pour cet exemple, nous allons s'orienter sur les icons *Iosicons*. Il suffit de placer cet import dans le fichier javascript : 
+La navigateur contiendra des icônes et dans notre cas, nous allons utiliser ***vector-icons*** de expo. Cette dépendance contient de nombreux icônes de différentes plateformes gratuites. Pour l'installer , ouvrez un terminal de commandes à la racine du projet et lancez : 
 
-```
+`npm i @expo/vector-icons`
+
+Pour cet exemple, nous allons s'orienter sur les icons *Iosicons*. Il suffit de placer cet import dans le fichier javascript : 
+
+```js
 import { Ionicons } from '@expo/vector-icons';
 ```
 
 Nous sommes enfin en capacité de construire notre vue : 
 
-```
+```js
 render() {
 	return(
 		<NavigationContainer independent={true}>
@@ -451,11 +455,11 @@ render() {
 }
 ```
 
-Sous le même principe que le premier navigateur, on répertorie les différentes vues dans lequelles on pourra naviguer. Il nous faut aussi spécifier des icônes pour chaque onglet, ce que l'on fait dans le paramètre *tabBarIcon* de la balise *Tab.Navigator*. On défini aussi un comportement du navigateur pour nous indiquer l'onglet dans lequel nous sommes, dans le paramètre *tabBarOptions*. Comme dans l'exemple du premier navigateur, pensez à créer les fonctions qui vont appeler les vues des onglets que l'on a créé précédement.
+Sous le même principe que le premier navigateur, on répertorie les différentes vues dans lequelles on pourra naviguer. Il nous faut aussi spécifier des icônes pour chaque onglet, ce que l'on fait dans le paramètre ***tabBarIcon*** de la balise ***Tab.Navigator***. On défini aussi un comportement du navigateur pour nous indiquer l'onglet dans lequel nous sommes, dans le paramètre ***tabBarOptions***. Comme dans l'exemple du premier navigateur, pensez à créer les fonctions qui vont appeler les vues des onglets que l'on a créé précédement.
 
-Attention, il ne peut normalement avoir qu'un navigateur par application. Pour spécifier à l'application qu'il faut remplacer le navigateur du *App.js* par celui-ci, nous devons ajouter le paramètre *independent={true}* à la balise *NavigationContainer*.
+Attention, il ne peut normalement avoir qu'un navigateur par application. Pour spécifier à l'application qu'il faut remplacer le navigateur du ***App.js*** par celui-ci, nous devons ajouter le paramètre `independent={true}` à la balise ***NavigationContainer***.
 
-### V.V. Conclusion
+### V.V. ✨ Conclusion
 
 A travers cet exemple, nous avons pu être en mesure de vous donner quelques bases sous React et React Native. Nous allons ensuite implémenter l'utilisation de l'API et l'intégrer à ce front-end.
 

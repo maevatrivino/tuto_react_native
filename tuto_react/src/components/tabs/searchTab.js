@@ -3,21 +3,6 @@ import {Text, ScrollView, StyleSheet, TextInput, View, Image,Button} from "react
 import {Card} from "react-native-elements";
 import {search} from "../../api/apiUtils";
 
-const result = [
-    {
-        trackName: 'GoGoToad',
-        artist : 'Toad',
-        album: 'Toad Dance',
-        source : 'https://vignette.wikia.nocookie.net/mario/images/3/38/CTTTChampignonD%27invincibilit%C3%A9.png/revision/latest?cb=20170322153140&path-prefix=fr'
-    },
-    {
-        trackName : 'Marrrriiiooo',
-        artist: 'Mario',
-        album: 'Mario and the Gambas',
-        source: 'https://upload.wikimedia.org/wikipedia/en/a/a9/MarioNSMBUDeluxe.png'
-    }
-];
-
 export default class SearchView extends Component{
 
     constructor(props) {
@@ -53,6 +38,7 @@ export default class SearchView extends Component{
                         placeholder="Search a song !"
                         onChangeText={(text) => this.setState({textSearch:text})}
                         value={this.state.textSearch}
+                        onSubmitEditing={this.search}
                     />
                 </View>
                 <View style={styleSearch.buttonContainer}>

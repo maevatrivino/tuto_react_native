@@ -489,6 +489,9 @@ Commencez par vous connecter sur [le dashboard spotify](https://developer.spotif
 
 ![](images/dashboard.PNG "Logo Title Text 1")
 
+Adaptation du storage
+Adaptation du process de auth 
+Création du nouveau secret 
 
 Vous pouvez maintenant créer votre application spotify, remplissez le formulaire pour accéder à la page de votre application. 
 

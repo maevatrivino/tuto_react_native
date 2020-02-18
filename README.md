@@ -5,6 +5,12 @@
 
 ## I. :newspaper: Histoire de React / React Native et but du tutoriel
 
+React est une libraire Javascript dévelopée et lancée par Facebook en 2011 pour répondre aux besoins de ces applications. React permet de créer des interfaces utilisateurs réactives à l'aide de vues et de composants qui vont venir s'adapter aux changements des données de l'application.
+
+React Native est une extension de React développée en 2015 par Facebook qui reprend les principes de React et les applique à la création d'applications natives Android ou iOs en utilisant du code javascript. 
+
+Dans ce tutoriel, nous allons vous montrer différents concepts de React et React Native pour créer une application nous permettant d'interagir avec l'API de Spotify.
+
 ## II. :wrench: Outils nécéssaires
 
 Dans ce tutoriel, réalisé sous Windows, nous allons avoir besoin de NodeJS, un environnement de développement, par exemple Visual Studio Code, qui est gratuit, et expo. Ce dernier s'installe grâce à npm, installé depuis NodeJS.
@@ -465,7 +471,27 @@ A travers cet exemple, nous avons pu être en mesure de vous donner quelques bas
 
 ## VI. :alien: L'API Spotify
 
-Résumé de l'api spotify, résumé des différents points d'entrée que l'on va utiliser, le process d'authetification sur le papier
+Spotify est un service de streaming musical utilisé par des millions d'utilisateurs à travers le monde. L'entreprise propose aussi une API que les développeurs peuvent exploiter pour développer leur propre application autour des services Spotify.
+
+La documentation complète est disponible à [cette adresse](https://developer.spotify.com/).
+
+Nous allons maintenant voir comment utiliser cette API dans notre application. 
+
+### VI.I 🔧 Étapes préliminaires
+
+Pour utiliser l'API Spotify vous aller avoir besoin de deux choses : 
+* Un compte spotify 
+* Un compte expo
+
+Commencez par vous connecter sur [le dashboard spotify](https://developer.spotify.com/dashboard). 
+
+//IMAGE
+
+Vous pouvez maintenant créer votre application spotify, remplissez le formulaire pour accéder à la page de votre application. 
+
+//IMAGE
+
+Sur cette page vous aller trouver 
 
 ## Création du storage 
 

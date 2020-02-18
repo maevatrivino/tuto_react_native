@@ -483,9 +483,12 @@ Pour utiliser l'API Spotify vous aller avoir besoin de deux choses :
 * Un compte spotify 
 * Un compte expo
 
+### VI.I.I :saxophone: L'application Spotify
+
 Commencez par vous connecter sur [le dashboard spotify](https://developer.spotify.com/dashboard). 
 
-//IMAGE
+![](images/dashboard.PNG "Logo Title Text 1")
+
 
 Vous pouvez maintenant créer votre application spotify, remplissez le formulaire pour accéder à la page de votre application. 
 

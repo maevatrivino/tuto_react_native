@@ -29,14 +29,6 @@ export default class LoginScreen extends Component
     static _LoginToAPI = async() =>
     {
         await loginToSpotify();
-        /*
-        const result = await refreshTokens();
-
-        if(result)
-        {
-            NavigatorRef.replace('Home');
-        }*/
-
         //TODO ELSE ERROR
     }
 

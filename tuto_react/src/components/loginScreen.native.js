@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import {Button, Text, StyleSheet, View } from 'react-native';
-import * as NavigatorRef from '../navigation/navigatorRef'
-import {refreshTokens,isAlreadyConnected, checkAndRefreshTokens} from "./../utils/authUtils";
+import {refreshTokens,isAlreadyConnected,loginToSpotify, checkAndRefreshTokens} from "./../utils/authUtils";
 import {getCurrentUser} from "../api/apiUtils";
+import * as NavigatorRef from '../navigation/navigatorRef'
+
 
 export default class LoginScreen extends Component
 {
@@ -11,20 +12,13 @@ export default class LoginScreen extends Component
         if(await isAlreadyConnected())
         {
 			await checkAndRefreshTokens();
-            let user = await getCurrentUser();
             NavigatorRef.replace('Home');
         } 
     }
 
     static _LoginToAPI = async() =>
     {
-        const result = await refreshTokens();
-
-        if(result)
-        {
-            let user = await getCurrentUser();
-            NavigatorRef.replace('Home');
-        }
+        await loginToSpotify();
 
         //TODO ELSE ERROR
     }

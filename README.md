@@ -490,14 +490,20 @@ Le schéma suivant (provenant de la documentation officelle) décrit en détails
 
 ![](./images/AuthFlow.png)
 
+1. Notre application redirige l'utilisateur vers les services de Spotify, avec notre **client_id**, une URL de redirection (**redirect_url**) et les autorisations dont notre application a besoin (**scope**).
+2. Une fois que l'utilisateur est connecté et nous a autorisé l'accès à ses données, Spotify le redirige vers notre application via l'URL de redirection avec un code d'autorisation qui va nous permettre de demander des tokens d'accès.
+3. Pour ce faire, on envoie une requête aux services spotify avec notre **client_id**, notre **client_secret**, le **code** d'autorisation, et notre **redirect_url**. Au succès, Spotify nous retourne un token d'accès (**access_token**), un temps pendant lequel ce token est valide (**expires_in**), et un token de rafraîchissement.
+4. Nous pouvons maintenant utiliser l'API pour récupérer les données dont nous avont besoin en utilisant notre token d'accès.
+5. Si le token d'accès a expiré, on en redemande un nouveau à l'aide de notre token de rafraîchissement auprès des services Spotify.
 
-### VI.II 🔧 Étapes préliminaires
+
+### VII 🔧 Étapes préliminaires
 
 Pour utiliser l'API Spotify vous aller avoir besoin de deux choses : 
 * Un compte [spotify](https://www.spotify.com/ca-en/account/overview/)
 * Un compte [expo](https://expo.io/)
 
-### VI.II.I :saxophone: Création de l'application Spotify
+### VII.I :saxophone: Création de l'application Spotify
 
 Commencez par vous connecter sur [le dashboard spotify](https://developer.spotify.com/dashboard) à l'aide de votre compte spotify. 
 
@@ -513,13 +519,39 @@ Vous pouvez maintenant créer votre application spotify, remplissez le formulair
 
 Sur cette page vous aller trouver deux informations importantes votre **clientID** et votre **clientSecret**, notez les ils vont nous être utile par la suite.
 
-### VI.II.II 🚖 AuthSession
+### VII.II 🚖 AuthSession
 
 Comme nous l'avons vu, le processsus de connexion nous demmande d'une URL sur laquelle Spotify va venir rediriger l'utilisateur une fois qu'il est connecté. Le problème c'est que nous sommes sur une application mobile et donc que nous n'avons pas d'URL sur laquelle rediriger l'utilisateur.
 
-Heureusement pour nous le package Expo vient avec une fonctionnalité appellée **[AuthSession](https://docs.expo.io/versions/latest/sdk/auth-session/)**. Ce service va nous permettre d'obtenir une URL sur laquelle rediriger l'utilisateur pour le ramener dans 
+Heureusement pour nous le package Expo vient avec une fonctionnalité appellée **[AuthSession](https://docs.expo.io/versions/latest/sdk/auth-session/)**. Ce service va nous permettre d'obtenir une URL sur laquelle rediriger l'utilisateur pour le ramener dans notre application et lui donner accès à nos fonctionnalités. 
 
-## Création du storage 
+Pour utiliser ce service, il vous suffit de vous connecter à votre compte expo. Ouvrez un terminal de commande à la racine de votre projet et utilisez la commande : 
+
+> `expo login`
+
+Votre application est maintenant liée à votre compte et vous avez maintenant accès aux services AuthSession dans votre application. Votre URL de redirection devrait avoir la forme suivante : 
+
+> `https://auth.expo.io/@username/folder`
+
+Avec **username** comme étant votre username expo et **folder** étant le nom du dossier à la racine de votre application. 
+
+### VII.II 🔑 Stockage des credentials 
+
+Pour garder ce tutoriel simple, nous allons stocker les credentials dans un fichier javascript local, il va de soit que si nous avions voulu distribuer cette application il faudrait les stocker sur un serveur externe auprès duquel l'application viendrait récuperer les credentials. 
+
+Créer vous donc un fichier **secret.js** dans le dossier **src/utils** et copiez y le code suivant : 
+
+```js
+export const spotifyCredentials = {
+    clientId: 'votre clientId',
+    clientSecret: 'votre clientSecret',
+    redirectUri: 'votre redirectUri'
+}
+``` 
+
+Pour récupérer les credentials vous n'aurez plus qu'à importer secret.js et récupérer la variable *spotifyCredentials*.
+
+## Création du storage
 
 Présentation AsyncStorage et création du dataStore
 

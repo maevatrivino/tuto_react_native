@@ -24,7 +24,6 @@ export const retrieveData = async (key) => {
 export const clearData = async() =>
 {
     try {
-       
         await AsyncStorage.clear();
     } catch (error) {
         console.error(error);

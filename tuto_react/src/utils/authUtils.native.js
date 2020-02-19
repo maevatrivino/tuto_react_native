@@ -2,6 +2,7 @@ import {AuthSession} from 'expo'
 import { encode as btoa } from 'base-64';
 import {storeData,retrieveData,clearData} from "./dataStore"
 import {spotifyCredentials} from './secret'
+import * as NavigatorRef from '../navigation/navigatorRef'
 
 const scopesArr = ['user-modify-playback-state','user-read-currently-playing','user-read-playback-state','user-library-modify',
                    'user-library-read','playlist-read-private','playlist-read-collaborative','playlist-modify-public',
@@ -15,6 +16,15 @@ export function getSpotifyRedirectUrl(){
 export function getSpotifyCredentials()
 {
     return spotifyCredentials;
+}
+
+export const loginToSpotify = async () => 
+{
+    const result = await refreshTokens();
+    if(result)
+    {
+        NavigatorRef.replace('Home');
+    }
 }
 
 //Retrieves the authorization codes to have access to the spotify API
@@ -171,4 +181,8 @@ export const checkAndRefreshTokens = async() =>
 
 export const logout = async() => {
     await clearData();
+}
+
+export const loginScreenCheck = async() => {
+    return true;
 }

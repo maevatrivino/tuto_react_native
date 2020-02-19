@@ -1,19 +1,8 @@
 import React, { Component } from 'react';
 import {Button, Text, StyleSheet, View } from 'react-native';
 import * as NavigatorRef from '../navigation/navigatorRef'
-import {saveAuthorizationCode,loginToSpotify,isAlreadyConnected, checkAndRefreshTokens,refreshTokens} from "./../utils/authUtils";
+import {loginToSpotify,loginScreenCheck,isAlreadyConnected, checkAndRefreshTokens} from "./../utils/authUtils";
 import {getCurrentUser} from "../api/apiUtils";
-
-const hash = window.location.hash
-  .substring(1)
-  .split("&")
-  .reduce(function(initial, item) {
-    if (item) {
-      var parts = item.split("=");
-      initial[parts[0]] = decodeURIComponent(parts[1]);
-    }
-    return initial;
-  }, {});
 
 export default class LoginScreen extends Component
 {
@@ -29,14 +18,6 @@ export default class LoginScreen extends Component
     static _LoginToAPI = async() =>
     {
         await loginToSpotify();
-        /*
-        const result = await refreshTokens();
-
-        if(result)
-        {
-            NavigatorRef.replace('Home');
-        }*/
-
         //TODO ELSE ERROR
     }
 
@@ -46,16 +27,9 @@ export default class LoginScreen extends Component
 
     async componentDidMount()
     {
-        let code = window.location.search.substring(6);
-        if (code) {
-            saveAuthorizationCode(code);
-            const result = await refreshTokens();
-
-            if(result)
-            {
-                let user = await getCurrentUser();
-                NavigatorRef.replace('Home');
-            }
+        const checkResult = await loginScreenCheck();
+        if(checkResult)
+        {
             LoginScreen.checkIfConnected();
         }
     }

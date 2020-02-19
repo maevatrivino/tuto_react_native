@@ -1,12 +1,23 @@
-import {AuthSession} from 'expo'
 import { encode as btoa } from 'base-64';
 import {storeData,retrieveData,clearData} from "./dataStore"
 import {spotifyCredentials} from './secret'
+import * as NavigatorRef from '../navigation/navigatorRef'
 
 const scopesArr = ['user-modify-playback-state','user-read-currently-playing','user-read-playback-state','user-library-modify',
                    'user-library-read','playlist-read-private','playlist-read-collaborative','playlist-modify-public',
                    'playlist-modify-private','user-read-recently-played','user-top-read'];
 const scopes = scopesArr.join(' ');
+
+const hash = window.location.hash
+  .substring(1)
+  .split("&")
+  .reduce(function(initial, item) {
+    if (item) {
+      var parts = item.split("=");
+      initial[parts[0]] = decodeURIComponent(parts[1]);
+    }
+    return initial;
+  }, {});
 
 export function saveAuthorizationCode(code)
 {
@@ -40,7 +51,6 @@ export const loginToSpotify = async () =>
     {
         console.error(err)
     }
-    
 }
 
 const getAuthorizationCode = async() =>
@@ -173,4 +183,20 @@ export const logout = async() => {
     await clearData();
     const credentials = getSpotifyCredentials();
     window.location.href = credentials.redirectUri;
+}
+
+export const loginScreenCheck = async() => {
+    let code = window.location.search.substring(6);
+    if (code) {
+        saveAuthorizationCode(code);
+        const result = await refreshTokens();
+
+        if(result)
+        {
+            NavigatorRef.replace('Home');
+        }
+        return true;
+    }
+
+    return false;
 }

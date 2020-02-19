@@ -477,17 +477,31 @@ La documentation complète est disponible à [cette adresse](https://developer.s
 
 Nous allons maintenant voir comment utiliser cette API dans notre application. 
 
-### VI.I 🔧 Étapes préliminaires
+//TODO LINK
+⚠️ *Les parties se concentrent sur l'intégration de l'API pour la partie Android et iOs du projet, les spécificités propres à l'application web sont détaillées dans la partie **Adapatation au web***
+
+### VI.I 🚀 Processus d'utilisation de l'API
+
+L'utilisation de l'API Spotify implique que l'utilisateur de l'application dispose d'un compte Spotify, s'y connecter et nous autoriser à accéder à ses données. Pour ce faire nous devons utiliser l'une des 3 méthode d'authorisation décrite dans [la documentation](https://developer.spotify.com/documentation/general/guides/authorization-guide/). 
+
+Nous allons utiliser la méthode **Authorization Code Flow** pour notre projet puisqu'elle nous permet de n'avoir à demander la connexion de l'utilisateur qu'une seule fois.
+
+Le schéma suivant (provenant de la documentation officelle) décrit en détails le flow de connexion : 
+
+![](./images/AuthFlow.png)
+
+
+### VI.II 🔧 Étapes préliminaires
 
 Pour utiliser l'API Spotify vous aller avoir besoin de deux choses : 
-* Un compte spotify 
-* Un compte expo
+* Un compte [spotify](https://www.spotify.com/ca-en/account/overview/)
+* Un compte [expo](https://expo.io/)
 
-### VI.I.I :saxophone: L'application Spotify
+### VI.II.I :saxophone: Création de l'application Spotify
 
-Commencez par vous connecter sur [le dashboard spotify](https://developer.spotify.com/dashboard). 
+Commencez par vous connecter sur [le dashboard spotify](https://developer.spotify.com/dashboard) à l'aide de votre compte spotify. 
 
-![](images/dashboard.PNG "Logo Title Text 1")
+![](./images/dashboard.PNG)
 
 Adaptation du storage
 Adaptation du process de auth 
@@ -495,9 +509,15 @@ Création du nouveau secret
 
 Vous pouvez maintenant créer votre application spotify, remplissez le formulaire pour accéder à la page de votre application. 
 
-//IMAGE
+![](./images/MyApp.PNG)
 
-Sur cette page vous aller trouver 
+Sur cette page vous aller trouver deux informations importantes votre **clientID** et votre **clientSecret**, notez les ils vont nous être utile par la suite.
+
+### VI.II.II 🚖 AuthSession
+
+Comme nous l'avons vu, le processsus de connexion nous demmande d'une URL sur laquelle Spotify va venir rediriger l'utilisateur une fois qu'il est connecté. Le problème c'est que nous sommes sur une application mobile et donc que nous n'avons pas d'URL sur laquelle rediriger l'utilisateur.
+
+Heureusement pour nous le package Expo vient avec une fonctionnalité appellée **[AuthSession](https://docs.expo.io/versions/latest/sdk/auth-session/)**. Ce service va nous permettre d'obtenir une URL sur laquelle rediriger l'utilisateur pour le ramener dans 
 
 ## Création du storage 
 

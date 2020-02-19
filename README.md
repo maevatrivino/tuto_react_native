@@ -548,9 +548,47 @@ export const spotifyCredentials = {
 
 Pour récupérer les credentials vous n'aurez plus qu'à importer secret.js et récupérer la variable *spotifyCredentials*.
 
-## Création du storage
+## VII :open_file_folder: Création du storage
 
-Présentation AsyncStorage et création du dataStore
+Notre application va avoir besoin de stocker des données qui devront être utilisables de manière globale. Pour ce faire nous allons créer une "interface" de stockage qui sera utilisable par les différents modules de notre application. 
+
+Pour ce faire nous allons utiliser le module [AsyncStorage](https://facebook.github.io/react-native/docs/asyncstorage) de React Native. Ce module nous propose des méthodes nous permettant de stocker les données sous forme **(clé,valeur)** dans le stockage Android ou iOs. 
+
+Créer un fichier **dataStore.js** dans le dossier **src/utils** comme ci-desssous : 
+
+```js
+import {AsyncStorage} from 'react-native';
+
+export const storeData = async (key,data) => {
+    try {
+        await AsyncStorage.setItem(key, data.toString());
+    } catch (error) {
+        console.error("Error Storing",key,data,error);
+    }
+};
+
+export const retrieveData = async (key) => {
+    try {
+        const value = await AsyncStorage.getItem(key);
+        if (value !== null) {
+        // We have data!!
+            return value;
+        }
+    } catch (error) {
+        console.error(error);
+        return false;
+    }
+};
+
+export const clearData = async() =>
+{
+    try {
+        await AsyncStorage.clear();
+    } catch (error) {
+        console.error(error);
+    }
+}
+```
 
 ## Connexion à l'API 
 

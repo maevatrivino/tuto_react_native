@@ -32,7 +32,7 @@ Un onglet internet va s'ouvrir avec les logs de l'application.
 
 Une fois expo complètement lancé, tapez `W` dans la console, cela aura pour effet de lancer la compilation de votre projet en web. Votre projet est maintenant accessible à l'adresse : 
 
-`http://localhost:19006/`
+> `http://localhost:19006/`
 
 :warning: Veillez bien au port sur lequel votre site est lancé car cela va nous être utile pour la suite.
 
@@ -192,9 +192,9 @@ Vous pouvez définir un composant tel que le menu d'accueil avec un texte et un 
 
 Pour naviguer entre les écrans, nous allons utiliser ***React Navigation***. Pour l'installer, ouvrez le terminal de commande à la racine du projet et appliquez ces commandes : 
 
-`npm install @react-navigation/native`
+> `npm install @react-navigation/native`
 
-`expo install react-native-gesture-handler react-native-reanimated react-native-screens react-native-safe-area-context @react-native-community/masked-view`. 
+> `expo install react-native-gesture-handler react-native-reanimated react-native-screens react-native-safe-area-context @react-native-community/masked-view`. 
 
 Ces dépendances permettent d'utiliser un système de navigation entre les écrans.
 
@@ -294,7 +294,7 @@ Pour cet onglet principal, créez un fichier dans le dossier *tabs* intitulé *h
 
 Pour afficher les playlists, implémentez un composant avec une vue vide intitulé ***playlistTab.js*** dans le dossier ***tab***. Pour afficher les playlists nous allons utiliser une ***ScrollView*** et des cartes dans ***React Native Elements***. Pour installer cette dépendance, dans une terminal de commandes à la racine du projet, faites la commande suivante :
 
-`npm install react-native-elements`
+> `npm install react-native-elements`
 
 Pour tester l'affichage de nos cartes (puisque nous n'avons encore pas de connexion à l'API), nous allons créer une constante à l'extérieur du composant pour répertorier les différentes playlists : 
 
@@ -412,7 +412,7 @@ const Tab = createBottomTabNavigator();
 
 La navigateur contiendra des icônes et dans notre cas, nous allons utiliser ***vector-icons*** de expo. Cette dépendance contient de nombreux icônes de différentes plateformes gratuites. Pour l'installer , ouvrez un terminal de commandes à la racine du projet et lancez : 
 
-`npm i @expo/vector-icons`
+> `npm i @expo/vector-icons`
 
 Pour cet exemple, nous allons s'orienter sur les icons *Iosicons*. Il suffit de placer cet import dans le fichier javascript : 
 

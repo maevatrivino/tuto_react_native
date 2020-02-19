@@ -854,6 +854,8 @@ async componentDidMount()
 
 ⚠️ N'oubliez pas les imports
 
+Vous remarquerez aussi l'utilisation de la méthode **componentDidMount**, cette méthode est appellée par le flow de React une fois que le composant a été affiché à l'écran ce qui nous permet de lancer des fonctions ou des traitements au moment où l'on peut commencer à modifier le DOM. 
+
 ## Utilisation de l'API 
 
 Présentation du wrapper et des différents points d'accès, plus le parsing

@@ -182,3 +182,7 @@ export const checkAndRefreshTokens = async() =>
 export const logout = async() => {
     await clearData();
 }
+
+export const loginScreenCheck = async() => {
+    return true;
+}

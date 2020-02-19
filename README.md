@@ -509,9 +509,6 @@ Commencez par vous connecter sur [le dashboard spotify](https://developer.spotif
 
 ![](./images/dashboard.PNG)
 
-Adaptation du storage
-Adaptation du process de auth 
-Création du nouveau secret 
 
 Vous pouvez maintenant créer votre application spotify, remplissez le formulaire pour accéder à la page de votre application. 
 
@@ -583,8 +580,7 @@ export const retrieveData = async (key) => {
     }
 };
 
-export const clearData = async() =>
-{
+export const clearData = async() => {
     try {
         await AsyncStorage.clear();
     } catch (error) {
@@ -593,9 +589,180 @@ export const clearData = async() =>
 }
 ```
 
-## Connexion à l'API 
+## VIII 🔌 Connexion à l'API
 
-Initialisation d'expo auth, setup de l'app sur dev, remplissage du secret.native.js
+Nous allons créer un module **AuthUtils** qui contiendra toutes les méthodes utiles pour la connexion et la gestion de l'accès à l'API.
+
+Créez un fichier **authUtils** dans le dossier **src/utils** :
+
+```js
+import {storeData,retrieveData,clearData} from "./dataStore"
+import {spotifyCredentials} from './secret'
+
+const scopesArr = ['user-modify-playback-state','user-read-currently-playing','user-read-playback-state','user-library-modify',
+                   'user-library-read','playlist-read-private','playlist-read-collaborative','playlist-modify-public',
+                   'playlist-modify-private','user-read-recently-played','user-top-read'];
+const scopes = scopesArr.join(' ');
+
+export function getSpotifyCredentials()
+{
+    return spotifyCredentials;
+}
+```
+
+### VIII.I :unlock: Récupération du code d'autorisation
+
+Nous allons commencer par créer la méthode qui permet de récupérer le code d'autorisation : 
+
+```js
+//Récupère le code d'autorisation auprès de l'API Spotify
+const getAuthorizationCode = async () => 
+{
+    try 
+    {
+        //Récupère les credentials
+        const credentials = getSpotifyCredentials();
+
+        //Récupère l'URL AuthSession
+        const redirectUrl = AuthSession.getRedirectUrl();
+
+        /*
+            Démarre le processus d'authentification avec AuthSession.
+            AuthSession nous permet de gérer le processus 
+            comme une simple fonction asynchrone
+        */
+        const result = await AuthSession.startAsync({
+            authUrl:
+            'https://accounts.spotify.com/authorize' +
+            '?response_type=code' +
+            '&client_id=' +
+            credentials.clientId +
+            (scopes ? '&scope=' + encodeURIComponent(scopes) : '') +
+            '&redirect_uri=' +
+            encodeURIComponent(redirectUrl),
+        });
+        
+        //Retourne le code d'autorisation depuis la réponse 
+        return result.params.code;
+    } 
+    catch (err) 
+    {
+        console.error(err)
+    }
+    
+}
+```
+
+⚠️ N'oubliez pas l'import en haut du fichier :
+
+```js
+import {AuthSession} from 'expo'
+```
+
+### 📬 VIII.II Récupération des tokens
+
+⚠️ Pour cette partie vous aurez besoin du module **base-64**, n'oubliez pas de faire un : 
+> `npm install base-64`
+
+Et d'importer les fonctions d'encryptage :
+```js 
+import { encode as btoa } from 'base-64';
+```
+
+Nous allons maitenant implémenter une fonction nous permettant de récupérer les tokens auprès des services Spotify :
+
+```js
+const getTokens = async () => 
+{
+    try {
+    
+    //Récupère les informations utiles
+    const authorizationCode = await getAuthorizationCode();
+    const credentials = getSpotifyCredentials();
+
+    //Encode les credentials en base64
+    const credsB64 = btoa(`${credentials.clientId}:${credentials.clientSecret}`);
+
+    //Envoie la requête auprès des services spotify avec notre code d'autorisation
+    const response = await fetch('https://accounts.spotify.com/api/token', {
+        method: 'POST',
+        headers: {
+        Authorization: `Basic ${credsB64}`,
+        'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `grant_type=authorization_code&code=${authorizationCode}&redirect_uri=${
+        credentials.redirectUri
+        }`,
+    });
+
+    //Converti la reponse en JSON
+    const responseJson = await response.json();
+
+    //Calcule le temps d'expiration des tokens
+    const expirationTime = new Date().getTime() + responseJson.expires_in * 1000;
+
+    //Stocke les données utiles
+    await storeData('accessToken', responseJson.access_token);
+    await storeData('refreshToken',responseJson.refresh_token);
+    await storeData('expirationTime', expirationTime);
+    } catch (err) {
+    console.error(err);
+    }
+}
+```
+
+Maintenant que nous pouvons récupérer nos tokens, il nous faut une fonction pour les rafraîchir si besoin : 
+
+```js
+export const refreshTokens = async () => {
+    try 
+    {
+        const credentials = getSpotifyCredentials();
+        const credsB64 = btoa(`${credentials.clientId}:${credentials.clientSecret}`);
+        const refreshToken = await retrieveData('refreshToken');
+
+        //Envoi de la requête de rafraîchissement
+        const response = await fetch('https://accounts.spotify.com/api/token', {
+        method: 'POST',
+        headers: {
+            Authorization: `Basic ${credsB64}`,
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `grant_type=refresh_token&refresh_token=${refreshToken}`,
+        });
+
+        //Conversion en JSON
+        const responseJson = await response.json();
+
+        //Si la reponse est une erreur on va essayer de récupérer les tokens normalement (Peut arriver si c'est la première connexion)
+
+        if (responseJson.error) 
+        {
+            await getTokens();
+        } 
+        else 
+        {
+            //On remet à jour les données dans le stockage
+            const expirationTime = new Date().getTime() + responseJson.expires_in * 1000;
+            
+            await storeData('accessToken', responseJson.access_token);
+            if (responseJson.refresh_token) 
+            {
+                await storeData('refreshToken', responseJson.refresh_token);
+            }
+            await storeData('expirationTime', expirationTime);
+        }
+
+        //We return true for success
+        return true;
+    } 
+    catch (err) 
+    {
+        console.error(err);
+        return false;
+    }
+}
+```
 
 ## Utilisation de l'API 
 

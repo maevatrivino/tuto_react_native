@@ -764,6 +764,96 @@ export const refreshTokens = async () => {
 }
 ```
 
+La fonction suivante va nous permettre de déclencher ou non le rafraîchissement des tokens au besoin : 
+
+```js
+export const checkAndRefreshTokens = async() =>
+{
+    const expirationTime = await retrieveData("expirationTime");
+
+    if(expirationTime == null || new Date().getTime() > expirationTime)
+    {
+        const response = await refreshTokens();
+        //Si erreur
+        if(response == null)
+        {
+            return false;
+        }
+        return true;
+    }
+    return true;
+} 
+```
+
+Nous allons ensuite impélementer une fonction qui va nous servir à vérifier si l'utilsateur est déjà connecté (C'est à dire si l'on dispose de tokens) et à le déconnecter (Vider le stockage)
+
+```js
+export const isAlreadyConnected = async() =>
+{
+    const accessToken = await retrieveData('accessToken');
+    const expirationTime = await retrieveData("expirationTime");
+
+    if(!accessToken || !expirationTime)
+    {
+        return false
+    }   
+    else
+    {
+        return true;
+    }
+}
+
+export const logout = async() => {
+    await clearData();
+}
+```
+
+### :door: VIII.III Connexion
+
+Et enfin on peut créer une fonction pour enclencher la connexion à Spotify et nous rediriger vers l'écran principal : 
+
+```js
+export const loginToSpotify = async () => 
+{
+    const result = await refreshTokens();
+    if(result)
+    {
+        NavigatorRef.replace('Home');
+    }
+}
+```
+
+⚠️ N'oubliez pas d'importer NavigatorRef : 
+
+```js
+import * as NavigatorRef from '../navigation/navigatorRef'
+```
+
+Ensuite dans **loginScreen.js** nous pouvons maintenant ajouer la connexion à Spotify au clic du bouton et le test de connexion au lancement de l'application : 
+
+```js
+static checkIfConnected = async() =>
+{ 
+    if(await isAlreadyConnected())
+    {
+        await checkAndRefreshTokens();
+        NavigatorRef.replace('Home');
+    } 
+}
+
+static _LoginToAPI = async() =>
+{
+    await loginToSpotify();
+}
+
+async componentDidMount()
+{
+    LoginScreen.checkIfConnected();
+}
+```
+
+⚠️ N'oubliez pas les imports
+
 ## Utilisation de l'API 
 
 Présentation du wrapper et des différents points d'accès, plus le parsing

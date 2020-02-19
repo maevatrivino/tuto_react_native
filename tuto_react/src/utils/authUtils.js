@@ -1,4 +1,3 @@
-import {AuthSession} from 'expo'
 import { encode as btoa } from 'base-64';
 import {storeData,retrieveData,clearData} from "./dataStore"
 import {spotifyCredentials} from './secret'

@@ -1074,3 +1074,17 @@ Vous pouvez maintenant copier les autres méthodes du fichier orignal.
 :sparkles: Votre application supporte maintenant l'accès depuis un navigateur web.
 
 ### XI 📚 Références
+
+[1]
+« @expo/vector-icons directory ». [En ligne]. Disponible sur: https://expo.github.io/vector-icons/. [Consulté le: 20-févr-2020].
+[2]
+« Getting Started · React Native ». [En ligne]. Disponible sur: https://facebook.github.io/react-native/. [Consulté le: 20-févr-2020].
+[3]
+« Getting Started · React Native Elements ». [En ligne]. Disponible sur: https://react-native-elements.github.io//react-native-elements/index.html. [Consulté le: 20-févr-2020].
+[4]
+« Getting started · React Navigation ». [En ligne]. Disponible sur: https://reactnavigation.org/index.html. [Consulté le: 20-févr-2020].
+[5]
+« Quelle sont les différences entre React Native et React.JS ? ⋆ Ambient Formations ». [En ligne]. Disponible sur: https://www.ambient-it.net/quelle-sont-les-differences-entre-react-native-et-reactjs/. [Consulté le: 20-févr-2020].
+
+
+

@@ -5,6 +5,12 @@
 
 ## I. :newspaper: Histoire de React / React Native et but du tutoriel
 
+React est une libraire Javascript dévelopée et lancée par Facebook en 2011 pour répondre aux besoins de ces applications. React permet de créer des interfaces utilisateurs réactives à l'aide de vues et de composants qui vont venir s'adapter aux changements des données de l'application.
+
+React Native est une extension de React développée en 2015 par Facebook qui reprend les principes de React et les applique à la création d'applications natives Android ou iOs en utilisant du code javascript. 
+
+Dans ce tutoriel, nous allons vous montrer différents concepts de React et React Native pour créer une application nous permettant d'interagir avec l'API de Spotify.
+
 ## II. :wrench: Outils nécéssaires
 
 Dans ce tutoriel, réalisé sous Windows, nous allons avoir besoin de NodeJS, un environnement de développement, par exemple Visual Studio Code, qui est gratuit, et expo. Ce dernier s'installe grâce à npm, installé depuis NodeJS.
@@ -463,13 +469,607 @@ Attention, il ne peut normalement avoir qu'un navigateur par application. Pour s
 
 A travers cet exemple, nous avons pu être en mesure de vous donner quelques bases sous React et React Native. Nous allons ensuite implémenter l'utilisation de l'API et l'intégrer à ce front-end.
 
+## VI. :alien: L'API Spotify
+
+Spotify est un service de streaming musical utilisé par des millions d'utilisateurs à travers le monde. L'entreprise propose aussi une API que les développeurs peuvent exploiter pour développer leur propre application autour des services Spotify.
+
+La documentation complète est disponible à [cette adresse](https://developer.spotify.com/).
+
+Nous allons maintenant voir comment utiliser cette API dans notre application. 
+
+//TODO LINK
+⚠️ *Les parties se concentrent sur l'intégration de l'API pour la partie Android et iOs du projet, les spécificités propres à l'application web sont détaillées dans la partie **Adapatation au web***
+
+### VI.I 🚀 Processus d'utilisation de l'API
+
+L'utilisation de l'API Spotify implique que l'utilisateur de l'application dispose d'un compte Spotify, s'y connecter et nous autoriser à accéder à ses données. Pour ce faire nous devons utiliser l'une des 3 méthode d'authorisation décrite dans [la documentation](https://developer.spotify.com/documentation/general/guides/authorization-guide/). 
+
+Nous allons utiliser la méthode **Authorization Code Flow** pour notre projet puisqu'elle nous permet de n'avoir à demander la connexion de l'utilisateur qu'une seule fois.
+
+Le schéma suivant (provenant de la documentation officelle) décrit en détails le flow de connexion : 
+
+![](./images/AuthFlow.png)
+
+1. Notre application redirige l'utilisateur vers les services de Spotify, avec notre **client_id**, une URL de redirection (**redirect_url**) et les autorisations dont notre application a besoin (**scope**).
+2. Une fois que l'utilisateur est connecté et nous a autorisé l'accès à ses données, Spotify le redirige vers notre application via l'URL de redirection avec un code d'autorisation qui va nous permettre de demander des tokens d'accès.
+3. Pour ce faire, on envoie une requête aux services spotify avec notre **client_id**, notre **client_secret**, le **code** d'autorisation, et notre **redirect_url**. Au succès, Spotify nous retourne un token d'accès (**access_token**), un temps pendant lequel ce token est valide (**expires_in**), et un token de rafraîchissement.
+4. Nous pouvons maintenant utiliser l'API pour récupérer les données dont nous avont besoin en utilisant notre token d'accès.
+5. Si le token d'accès a expiré, on en redemande un nouveau à l'aide de notre token de rafraîchissement auprès des services Spotify.
 
 
+### VII 🔧 Étapes préliminaires
+
+Pour utiliser l'API Spotify vous aller avoir besoin de deux choses : 
+* Un compte [spotify](https://www.spotify.com/ca-en/account/overview/)
+* Un compte [expo](https://expo.io/)
+
+### VII.I :saxophone: Création de l'application Spotify
+
+Commencez par vous connecter sur [le dashboard spotify](https://developer.spotify.com/dashboard) à l'aide de votre compte spotify. 
+
+![](./images/dashboard.PNG)
 
 
+Vous pouvez maintenant créer votre application spotify, remplissez le formulaire pour accéder à la page de votre application. 
+
+![](./images/MyApp.PNG)
+
+Sur cette page vous aller trouver deux informations importantes votre **clientID** et votre **clientSecret**, notez les ils vont nous être utile par la suite.
+
+### VII.II 🚖 AuthSession
+
+Comme nous l'avons vu, le processsus de connexion nous demmande d'une URL sur laquelle Spotify va venir rediriger l'utilisateur une fois qu'il est connecté. Le problème c'est que nous sommes sur une application mobile et donc que nous n'avons pas d'URL sur laquelle rediriger l'utilisateur.
+
+Heureusement pour nous le package Expo vient avec une fonctionnalité appellée **[AuthSession](https://docs.expo.io/versions/latest/sdk/auth-session/)**. Ce service va nous permettre d'obtenir une URL sur laquelle rediriger l'utilisateur pour le ramener dans notre application et lui donner accès à nos fonctionnalités. 
+
+Pour utiliser ce service, il vous suffit de vous connecter à votre compte expo. Ouvrez un terminal de commande à la racine de votre projet et utilisez la commande : 
+
+> `expo login`
+
+Votre application est maintenant liée à votre compte et vous avez maintenant accès aux services AuthSession dans votre application. Votre URL de redirection devrait avoir la forme suivante : 
+
+> `https://auth.expo.io/@username/folder`
+
+Avec **username** comme étant votre username expo et **folder** étant le nom du dossier à la racine de votre application. 
+
+N'oubliez pas d'ajouter cette URL à vos URL de redirection sur le tableau de bord Spotify. 
+
+### VII.II 🔑 Stockage des credentials 
+
+Pour garder ce tutoriel simple, nous allons stocker les credentials dans un fichier javascript local, il va de soit que si nous avions voulu distribuer cette application il faudrait les stocker sur un serveur externe auprès duquel l'application viendrait récuperer les credentials. 
+
+Créer vous donc un fichier **secret.js** dans le dossier **src/utils** et copiez y le code suivant : 
+
+```js
+export const spotifyCredentials = {
+    clientId: 'votre clientId',
+    clientSecret: 'votre clientSecret',
+    redirectUri: 'votre redirectUri'
+}
+``` 
+
+Pour récupérer les credentials vous n'aurez plus qu'à importer secret.js et récupérer la variable *spotifyCredentials*.
+
+## VII :open_file_folder: Création du storage
+
+Notre application va avoir besoin de stocker des données qui devront être utilisables de manière globale. Pour ce faire nous allons créer une "interface" de stockage qui sera utilisable par les différents modules de notre application. 
+
+Pour ce faire nous allons utiliser le module [AsyncStorage](https://facebook.github.io/react-native/docs/asyncstorage) de React Native. Ce module nous propose des méthodes nous permettant de stocker les données sous forme **(clé,valeur)** dans le stockage Android ou iOs. 
+
+Créer un fichier **dataStore.js** dans le dossier **src/utils** comme ci-desssous : 
+
+```js
+import {AsyncStorage} from 'react-native';
+
+export const storeData = async (key,data) => {
+    try {
+        await AsyncStorage.setItem(key, data.toString());
+    } catch (error) {
+        console.error("Error Storing",key,data,error);
+    }
+};
+
+export const retrieveData = async (key) => {
+    try {
+        const value = await AsyncStorage.getItem(key);
+        if (value !== null) {
+        // We have data!!
+            return value;
+        }
+    } catch (error) {
+        console.error(error);
+        return false;
+    }
+};
+
+export const clearData = async() => {
+    try {
+        await AsyncStorage.clear();
+    } catch (error) {
+        console.error(error);
+    }
+}
+```
+
+## VIII 🔌 Connexion à l'API
+
+Nous allons créer un module **AuthUtils** qui contiendra toutes les méthodes utiles pour la connexion et la gestion de l'accès à l'API.
+
+Créez un fichier **authUtils** dans le dossier **src/utils** :
+
+```js
+import {storeData,retrieveData,clearData} from "./dataStore"
+import {spotifyCredentials} from './secret'
+
+const scopesArr = ['user-modify-playback-state','user-read-currently-playing','user-read-playback-state','user-library-modify',
+                   'user-library-read','playlist-read-private','playlist-read-collaborative','playlist-modify-public',
+                   'playlist-modify-private','user-read-recently-played','user-top-read'];
+const scopes = scopesArr.join(' ');
+
+export function getSpotifyCredentials()
+{
+    return spotifyCredentials;
+}
+```
+
+### VIII.I :unlock: Récupération du code d'autorisation
+
+Nous allons commencer par créer la méthode qui permet de récupérer le code d'autorisation : 
+
+```js
+//Récupère le code d'autorisation auprès de l'API Spotify
+const getAuthorizationCode = async () => 
+{
+    try 
+    {
+        //Récupère les credentials
+        const credentials = getSpotifyCredentials();
+
+        //Récupère l'URL AuthSession
+        const redirectUrl = AuthSession.getRedirectUrl();
+
+        /*
+            Démarre le processus d'authentification avec AuthSession.
+            AuthSession nous permet de gérer le processus 
+            comme une simple fonction asynchrone
+        */
+        const result = await AuthSession.startAsync({
+            authUrl:
+            'https://accounts.spotify.com/authorize' +
+            '?response_type=code' +
+            '&client_id=' +
+            credentials.clientId +
+            (scopes ? '&scope=' + encodeURIComponent(scopes) : '') +
+            '&redirect_uri=' +
+            encodeURIComponent(redirectUrl),
+        });
+        
+        //Retourne le code d'autorisation depuis la réponse 
+        return result.params.code;
+    } 
+    catch (err) 
+    {
+        console.error(err)
+    }
+    
+}
+```
+
+⚠️ N'oubliez pas l'import en haut du fichier :
+
+```js
+import {AuthSession} from 'expo'
+```
+
+### 📬 VIII.II Récupération des tokens
+
+⚠️ Pour cette partie vous aurez besoin du module **base-64**, n'oubliez pas de faire un : 
+> `npm install base-64`
+
+Et d'importer les fonctions d'encryptage :
+```js 
+import { encode as btoa } from 'base-64';
+```
+
+Nous allons maitenant implémenter une fonction nous permettant de récupérer les tokens auprès des services Spotify :
+
+```js
+const getTokens = async () => 
+{
+    try {
+    
+    //Récupère les informations utiles
+    const authorizationCode = await getAuthorizationCode();
+    const credentials = getSpotifyCredentials();
+
+    //Encode les credentials en base64
+    const credsB64 = btoa(`${credentials.clientId}:${credentials.clientSecret}`);
+
+    //Envoie la requête auprès des services spotify avec notre code d'autorisation
+    const response = await fetch('https://accounts.spotify.com/api/token', {
+        method: 'POST',
+        headers: {
+        Authorization: `Basic ${credsB64}`,
+        'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `grant_type=authorization_code&code=${authorizationCode}&redirect_uri=${
+        credentials.redirectUri
+        }`,
+    });
+
+    //Converti la reponse en JSON
+    const responseJson = await response.json();
+
+    //Calcule le temps d'expiration des tokens
+    const expirationTime = new Date().getTime() + responseJson.expires_in * 1000;
+
+    //Stocke les données utiles
+    await storeData('accessToken', responseJson.access_token);
+    await storeData('refreshToken',responseJson.refresh_token);
+    await storeData('expirationTime', expirationTime);
+    } catch (err) {
+    console.error(err);
+    }
+}
+
+export const getAccessToken = async() =>
+{
+    return await retrieveData('accessToken');
+}
+```
+
+Maintenant que nous pouvons récupérer nos tokens, il nous faut une fonction pour les rafraîchir si besoin : 
+
+```js
+export const refreshTokens = async () => {
+    try 
+    {
+        const credentials = getSpotifyCredentials();
+        const credsB64 = btoa(`${credentials.clientId}:${credentials.clientSecret}`);
+        const refreshToken = await retrieveData('refreshToken');
+
+        //Envoi de la requête de rafraîchissement
+        const response = await fetch('https://accounts.spotify.com/api/token', {
+        method: 'POST',
+        headers: {
+            Authorization: `Basic ${credsB64}`,
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `grant_type=refresh_token&refresh_token=${refreshToken}`,
+        });
+
+        //Conversion en JSON
+        const responseJson = await response.json();
+
+        //Si la reponse est une erreur on va essayer de récupérer les tokens normalement (Peut arriver si c'est la première connexion)
+
+        if (responseJson.error) 
+        {
+            await getTokens();
+        } 
+        else 
+        {
+            //On remet à jour les données dans le stockage
+            const expirationTime = new Date().getTime() + responseJson.expires_in * 1000;
+            
+            await storeData('accessToken', responseJson.access_token);
+            if (responseJson.refresh_token) 
+            {
+                await storeData('refreshToken', responseJson.refresh_token);
+            }
+            await storeData('expirationTime', expirationTime);
+        }
+
+        //We return true for success
+        return true;
+    } 
+    catch (err) 
+    {
+        console.error(err);
+        return false;
+    }
+}
+```
+
+La fonction suivante va nous permettre de déclencher ou non le rafraîchissement des tokens au besoin : 
+
+```js
+export const checkAndRefreshTokens = async() =>
+{
+    const expirationTime = await retrieveData("expirationTime");
+
+    if(expirationTime == null || new Date().getTime() > expirationTime)
+    {
+        const response = await refreshTokens();
+        //Si erreur
+        if(response == null)
+        {
+            return false;
+        }
+        return true;
+    }
+    return true;
+} 
+```
+
+Nous allons ensuite impélementer une fonction qui va nous servir à vérifier si l'utilsateur est déjà connecté (C'est à dire si l'on dispose de tokens) et à le déconnecter (Vider le stockage)
+
+```js
+export const isAlreadyConnected = async() =>
+{
+    const accessToken = await retrieveData('accessToken');
+    const expirationTime = await retrieveData("expirationTime");
+
+    if(!accessToken || !expirationTime)
+    {
+        return false
+    }   
+    else
+    {
+        return true;
+    }
+}
+
+export const logout = async() => {
+    await clearData();
+}
+```
+
+### :door: VIII.III Connexion
+
+Et enfin on peut créer une fonction pour enclencher la connexion à Spotify et nous rediriger vers l'écran principal : 
+
+```js
+export const loginToSpotify = async () => 
+{
+    const result = await refreshTokens();
+    if(result)
+    {
+        NavigatorRef.replace('Home');
+    }
+}
+```
+
+⚠️ N'oubliez pas d'importer NavigatorRef : 
+
+```js
+import * as NavigatorRef from '../navigation/navigatorRef'
+```
+
+Ensuite dans **loginScreen.js** nous pouvons maintenant ajouer la connexion à Spotify au clic du bouton et le test de connexion au lancement de l'application : 
+
+```js
+static checkIfConnected = async() =>
+{ 
+    if(await isAlreadyConnected())
+    {
+        await checkAndRefreshTokens();
+        NavigatorRef.replace('Home');
+    } 
+}
+
+static _LoginToAPI = async() =>
+{
+    await loginToSpotify();
+}
+
+async componentDidMount()
+{
+    LoginScreen.checkIfConnected();
+}
+```
+
+⚠️ N'oubliez pas les imports
+
+Vous remarquerez aussi l'utilisation de la méthode **componentDidMount**, cette méthode est appellée par le flow de React une fois que le composant a été affiché à l'écran ce qui nous permet de lancer des fonctions ou des traitements au moment où l'on peut commencer à modifier le DOM. 
 
 
+## :radio: IX Utilisation de l'API 
 
+Maintenant que nous avons accès à l'API nous allons pouvoir commencer à l'utiliser. Nous pourrions appeller directement l'API à l'aide de [fetch](https://developer.mozilla.org/fr/docs/Web/API/Fetch_API/Using_Fetch) ou d'[axios](https://github.com/axios/axios). 
 
+Pour simplifier ce tutoriel nous avons choisi d'utiliser la libraire  [spotify-web-api-js](https://github.com/JMPerez/spotify-web-api-js) de José M. Pérez qui est un ancien développeur de Spotify. Pour l'installer il vous suffit de faire la commande suivante à la racine de votre projet :
 
+> ` npm install spotify-web-api-js`
+
+Cette libraire va nous permettre d'accéder à l'API à l'aide d'un wrapper qui s'occupera des appels pour nous et nous renverra la réponse de l'API sous la forme d'un objet javascript. Nous allons donc pouvoir créer un module qui va nous permettre de réaliser les appels API depuis nos composants. 
+
+Dans le dossier **src/api** créez le module **apiUtils.js**. Nous allons créer une première méthode qui nous permet de créer et de récupérer un wrapper auquel on aura déjà fourni le token d'accès : 
+
+```js
+export const getAPIWrapper = async () => {
+    var SpotifyWebApi = require('spotify-web-api-js');
+
+    //On n'oublie pas de refresh les tokens si nécéssaires 
+    await checkAndRefreshTokens();
+    const accessToken = await getAccessToken();
+
+    //On crée une nouvelle instance du wrapper à laquelle on donne les tokens 
+    let sp = new SpotifyWebApi();
+    await sp.setAccessToken(accessToken);
+    return sp;
+}
+```
+
+:warning: N'oubliez pas les imports des fonctions de authUtils
+
+On peut maintenant utiliser le wrapper pour récupérer des données sur l'API comme par exemple les données de l'utilisateur connecté : 
+
+```js
+export const getCurrentUser = async() =>
+{   
+    const apiWrapper = await getAPIWrapper();
+    const apiResponse = await apiWrapper.getMe();
+    return apiResponse;
+}
+```
+
+De nombreuses autres méthodes sont disponibles comme la récupération des playlists ou une recherche de musique n'hésitez pas à consulter [la documentation de la librairie](https://doxdox.org/jmperez/spotify-web-api-js). 
+
+## X :computer: Adaptation au web 
+
+Bien que React Native repose sur une base React, elle dispose de ses propres modules qui ne sont pa compatibles avec le Web, nous allons donc voir comment adapter notre application pour qu'elle soit accessible depuis un navigateur. 
+
+### X.I 🛃 Implémenter un comportement différent pour le web et le natif
+
+Pour éviter d'avoir à réécrire l'ensemble des modules, nous aimerions pouvoir adapter le comportement des modules en fonction de si l'on va utiliser notre application en Web ou en Natif. Heureusement pour nous nous allons pouvoir profiter d'une spécifité des compilateurs Expo.
+
+Pour compiler notre code et le mettre sous forme d'un site web ou d'une application native Expo utilise deux compilateurs différents : 
+* [Metro](https://github.com/facebook/metro) pour le natif
+* [Webpack](https://webpack.js.org/) pour le web
+
+Hors Metro propose une extension de fichier qui lui est propre **`.native.js`**. L'avantage étant que Metro va priviligier ces fichiers aux simples fichier **.js** portant le même nom, là où les compilateurs web comme Webpack vont ignorer les .native.js. 
+
+*Exemple* :
+
+* Container.js *Reconnu par les compilateurs web et Metro si aucun fichier .native n'est présent*
+* Container.native.js *Reconnu seulement par Metro et pris par défaut*
+
+Un autre avantage est que nous n'avons pas à refaire nos imports dans les fichiers utilisants les modules que nous allons avoir à modifier. 
+
+### X.II :floppy_disk: Adaptation du stockage
+
+Le module dataStore que nous avons créé précédemment utilise la librairie AsyncStorage qui n'est pas disponible en web, il nous faut donc une autre méthode de stockage. 
+
+Avant toute chose renommer votre fichier **dataStore.js** en **dataStore.native.js** et recréez un fichier **dataStore.js** vide. 
+
+Pour implémenter notre mécanique de stockage nous allons utiliser la librairie [local-storage](https://github.com/bevacqua/local-storage) qui va nous permettre d'accéder au stockage local du navigateur. 
+
+Nous pouvons maintenant réimplémenter les fonctions de dataStore dans le nouveau fichier : 
+
+```js
+export const storeData = async (key,data) => {
+    var ls = require('local-storage');
+    try {
+        ls.set(key, data.toString());
+    } catch (error) {
+        console.error("Error Storing",key,data,error);
+    }
+};
+
+export const retrieveData = async (key) => {
+    var ls = require('local-storage');
+    try {
+        const value = await ls.get(key);
+        if (value !== null) 
+        {
+            // We have data!!
+            return value;
+        }
+    } catch (error) {
+        console.error(error);
+        return false;
+    }
+};
+
+export const clearData = async() =>
+{
+    var ls = require('local-storage');
+    try {
+       
+        await ls.clear();
+    } catch (error) {
+        console.error(error);
+    }
+}
+```
+
+### X.II 👮 Processus d'authentification
+
+Vu que nous sommes en web nous n'avons pas accès à AuthSession, il va donc falloir que nous redirigions directement l'utilisateur sur notre application. 
+
+Vous pouvez commencer par ajouter l'extension *.native* à votre **secret.js** et recréer un nouveau **secret.js** avec les même données mis à part votre URL de redirection qui correspond à l'URL de redirection (`http://localhost:190006/`si vous utilisez les fonctions web de Expo). Ajoutez cette URL à vos URLs de redirection sur le tableau de bord Spotify. 
+
+Ajoutez l'extension *.native* à votre fichier **authUtils.js**, et récréez en un nouveau. 
+
+ Commençons par la récupération du code d'autorisation : 
+
+ ```js 
+//Retrieves the authorization codes to have access to the spotify API
+export const loginToSpotify = async () => 
+{
+    try 
+    {
+        //Récupération des credentials
+        const credentials = getSpotifyCredentials();
+
+        //Création de l'url de requête 
+        let authUrl =   'https://accounts.spotify.com/authorize' +
+                        '?response_type=code' +
+                        '&client_id=' +
+                        credentials.clientId +
+                        (scopes ? '&scope=' + encodeURIComponent(scopes) : '') +
+                        '&redirect_uri=' +
+                        encodeURIComponent(credentials.redirectUri);
+
+        //Redirection directe vers Spotify
+        window.location.href = authUrl;
+    } 
+    catch (err) 
+    {
+        console.error(err)
+    }
+}
+```
+
+Comme vous le remarquer nous redirigeons directement l'utilisateur chez Spotify qui va le ramener sur notre application. Du fait du fonctionnement du services de comptes, l'URL sur laquelle Spotify va rediriger l'utilisateur va contenir notre code d'autorization. 
+
+L'utilisateur à son retour sur l'application va atterir sur le loginScreen nous pouvons donc créer les fonctions suivantes : 
+
+***loginScreen.js***
+```js
+async componentDidMount()
+{
+    //Méthode de AuthUtils 
+    const checkResult = await loginScreenCheck();
+    if(checkResult)
+    {
+        LoginScreen.checkIfConnected();
+    }
+} 
+```
+
+***authUtils.native.js***
+```js
+export const loginScreenCheck = async() => {
+    return true;
+}
+```
+
+***authUtils.js***
+```js
+export const loginScreenCheck = async() => {
+    //On récupère le code
+    let code = window.location.search.substring(6);
+    if (code) {
+        storeData("authorization_code",code);
+        const result = await refreshTokens();
+
+        //On redirige vers la home
+        if(result)
+        {
+            NavigatorRef.replace('Home');
+        }
+        return true;
+    }
+
+    return false;
+}
+```
+
+⚠️ N'oubliez pas l'import de NavigatorRef
+
+Nous pouvons maitenant refaire la récupérations des tokens. 
+
+```js
+const getAuthorizationCode = async() =>
+{
+    const authorizationCode = retrieveData("authorization_code");
+    return authorizationCode
+}
+```
+
+Vous pouvez maintenant copier les autres méthodes du fichier orignal.
+
+:sparkles: Votre application supporte maintenant l'accès depuis un navigateur web.
 

@@ -709,6 +709,11 @@ const getTokens = async () =>
     console.error(err);
     }
 }
+
+export const getAccessToken = async() =>
+{
+    return await retrieveData('accessToken');
+}
 ```
 
 Maintenant que nous pouvons récupérer nos tokens, il nous faut une fonction pour les rafraîchir si besoin : 
@@ -856,9 +861,48 @@ async componentDidMount()
 
 Vous remarquerez aussi l'utilisation de la méthode **componentDidMount**, cette méthode est appellée par le flow de React une fois que le composant a été affiché à l'écran ce qui nous permet de lancer des fonctions ou des traitements au moment où l'on peut commencer à modifier le DOM. 
 
-## Utilisation de l'API 
 
-Présentation du wrapper et des différents points d'accès, plus le parsing
+## :radio: Utilisation de l'API 
+
+Maintenant que nous avons accès à l'API nous allons pouvoir commencer à l'utiliser. Nous pourrions appeller directement l'API à l'aide de [fetch](https://developer.mozilla.org/fr/docs/Web/API/Fetch_API/Using_Fetch) ou d'[axios](https://github.com/axios/axios). 
+
+Pour simplifier ce tutoriel nous avons choisi d'utiliser la libraire  [spotify-web-api-js](https://github.com/JMPerez/spotify-web-api-js) de José M. Pérez qui est un ancien développeur de Spotify. Pour l'installer il vous suffit de faire la commande suivante à la racine de votre projet :
+
+> ` npm install spotify-web-api-js`
+
+Cette libraire va nous permettre d'accéder à l'API à l'aide d'un wrapper qui s'occupera des appels pour nous et nous renverra la réponse de l'API sous la forme d'un objet javascript. Nous allons donc pouvoir créer un module qui va nous permettre de réaliser les appels API depuis nos composants. 
+
+Dans le dossier **src/api** créez le module **apiUtils.js**. Nous allons créer une première méthode qui nous permet de créer et de récupérer un wrapper auquel on aura déjà fourni le token d'accès : 
+
+```js
+export const getAPIWrapper = async () => {
+    var SpotifyWebApi = require('spotify-web-api-js');
+
+    //On n'oublie pas de refresh les tokens si nécéssaires 
+    await checkAndRefreshTokens();
+    const accessToken = await getAccessToken();
+
+    //On crée une nouvelle instance du wrapper à laquelle on donne les tokens 
+    let sp = new SpotifyWebApi();
+    await sp.setAccessToken(accessToken);
+    return sp;
+}
+```
+
+:warning: N'oubliez pas les imports des fonctions de authUtils
+
+On peut maintenant utiliser le wrapper pour récupérer des données sur l'API comme par exemple les données de l'utilisateur connecté : 
+
+```js
+export const getCurrentUser = async() =>
+{   
+    const apiWrapper = await getAPIWrapper();
+    const apiResponse = await apiWrapper.getMe();
+    return apiResponse;
+}
+```
+
+De nombreuses autres méthodes sont disponibles comme la récupération des playlists ou une recherche de musique n'hésitez pas à consulter [la documentation de la librairie](https://doxdox.org/jmperez/spotify-web-api-js). 
 
 ## Adaptation au web 
 

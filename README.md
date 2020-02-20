@@ -1073,3 +1073,4 @@ Vous pouvez maintenant copier les autres méthodes du fichier orignal.
 
 :sparkles: Votre application supporte maintenant l'accès depuis un navigateur web.
 
+### XI 📚 Références

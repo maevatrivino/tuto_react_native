@@ -532,6 +532,8 @@ Votre application est maintenant liée à votre compte et vous avez maintenant a
 
 Avec **username** comme étant votre username expo et **folder** étant le nom du dossier à la racine de votre application. 
 
+N'oubliez pas d'ajouter cette URL à vos URL de redirection sur le tableau de bord Spotify. 
+
 ### VII.II 🔑 Stockage des credentials 
 
 Pour garder ce tutoriel simple, nous allons stocker les credentials dans un fichier javascript local, il va de soit que si nous avions voulu distribuer cette application il faudrait les stocker sur un serveur externe auprès duquel l'application viendrait récuperer les credentials. 
@@ -862,7 +864,7 @@ async componentDidMount()
 Vous remarquerez aussi l'utilisation de la méthode **componentDidMount**, cette méthode est appellée par le flow de React une fois que le composant a été affiché à l'écran ce qui nous permet de lancer des fonctions ou des traitements au moment où l'on peut commencer à modifier le DOM. 
 
 
-## :radio: Utilisation de l'API 
+## :radio: IX Utilisation de l'API 
 
 Maintenant que nous avons accès à l'API nous allons pouvoir commencer à l'utiliser. Nous pourrions appeller directement l'API à l'aide de [fetch](https://developer.mozilla.org/fr/docs/Web/API/Fetch_API/Using_Fetch) ou d'[axios](https://github.com/axios/axios). 
 
@@ -904,9 +906,170 @@ export const getCurrentUser = async() =>
 
 De nombreuses autres méthodes sont disponibles comme la récupération des playlists ou une recherche de musique n'hésitez pas à consulter [la documentation de la librairie](https://doxdox.org/jmperez/spotify-web-api-js). 
 
-## Adaptation au web 
+## X :computer: Adaptation au web 
 
-Adaptation du storage
-Adaptation du process de auth 
-Création du nouveau secret 
+Bien que React Native repose sur une base React, elle dispose de ses propres modules qui ne sont pa compatibles avec le Web, nous allons donc voir comment adapter notre application pour qu'elle soit accessible depuis un navigateur. 
+
+### X.I 🛃 Implémenter un comportement différent pour le web et le natif
+
+Pour éviter d'avoir à réécrire l'ensemble des modules, nous aimerions pouvoir adapter le comportement des modules en fonction de si l'on va utiliser notre application en Web ou en Natif. Heureusement pour nous nous allons pouvoir profiter d'une spécifité des compilateurs Expo.
+
+Pour compiler notre code et le mettre sous forme d'un site web ou d'une application native Expo utilise deux compilateurs différents : 
+* [Metro](https://github.com/facebook/metro) pour le natif
+* [Webpack](https://webpack.js.org/) pour le web
+
+Hors Metro propose une extension de fichier qui lui est propre **`.native.js`**. L'avantage étant que Metro va priviligier ces fichiers aux simples fichier **.js** portant le même nom, là où les compilateurs web comme Webpack vont ignorer les .native.js. 
+
+*Exemple* :
+
+* Container.js *Reconnu par les compilateurs web et Metro si aucun fichier .native n'est présent*
+* Container.native.js *Reconnu seulement par Metro et pris par défaut*
+
+Un autre avantage est que nous n'avons pas à refaire nos imports dans les fichiers utilisants les modules que nous allons avoir à modifier. 
+
+### X.II :floppy_disk: Adaptation du stockage
+
+Le module dataStore que nous avons créé précédemment utilise la librairie AsyncStorage qui n'est pas disponible en web, il nous faut donc une autre méthode de stockage. 
+
+Avant toute chose renommer votre fichier **dataStore.js** en **dataStore.native.js** et recréez un fichier **dataStore.js** vide. 
+
+Pour implémenter notre mécanique de stockage nous allons utiliser la librairie [local-storage](https://github.com/bevacqua/local-storage) qui va nous permettre d'accéder au stockage local du navigateur. 
+
+Nous pouvons maintenant réimplémenter les fonctions de dataStore dans le nouveau fichier : 
+
+```js
+export const storeData = async (key,data) => {
+    var ls = require('local-storage');
+    try {
+        ls.set(key, data.toString());
+    } catch (error) {
+        console.error("Error Storing",key,data,error);
+    }
+};
+
+export const retrieveData = async (key) => {
+    var ls = require('local-storage');
+    try {
+        const value = await ls.get(key);
+        if (value !== null) 
+        {
+            // We have data!!
+            return value;
+        }
+    } catch (error) {
+        console.error(error);
+        return false;
+    }
+};
+
+export const clearData = async() =>
+{
+    var ls = require('local-storage');
+    try {
+       
+        await ls.clear();
+    } catch (error) {
+        console.error(error);
+    }
+}
+```
+
+### X.II 👮 Processus d'authentification
+
+Vu que nous sommes en web nous n'avons pas accès à AuthSession, il va donc falloir que nous redirigions directement l'utilisateur sur notre application. 
+
+Vous pouvez commencer par ajouter l'extension *.native* à votre **secret.js** et recréer un nouveau **secret.js** avec les même données mis à part votre URL de redirection qui correspond à l'URL de redirection (`http://localhost:190006/`si vous utilisez les fonctions web de Expo). Ajoutez cette URL à vos URLs de redirection sur le tableau de bord Spotify. 
+
+Ajoutez l'extension *.native* à votre fichier **authUtils.js**, et récréez en un nouveau. 
+
+ Commençons par la récupération du code d'autorisation : 
+
+ ```js 
+//Retrieves the authorization codes to have access to the spotify API
+export const loginToSpotify = async () => 
+{
+    try 
+    {
+        //Récupération des credentials
+        const credentials = getSpotifyCredentials();
+
+        //Création de l'url de requête 
+        let authUrl =   'https://accounts.spotify.com/authorize' +
+                        '?response_type=code' +
+                        '&client_id=' +
+                        credentials.clientId +
+                        (scopes ? '&scope=' + encodeURIComponent(scopes) : '') +
+                        '&redirect_uri=' +
+                        encodeURIComponent(credentials.redirectUri);
+
+        //Redirection directe vers Spotify
+        window.location.href = authUrl;
+    } 
+    catch (err) 
+    {
+        console.error(err)
+    }
+}
+```
+
+Comme vous le remarquer nous redirigeons directement l'utilisateur chez Spotify qui va le ramener sur notre application. Du fait du fonctionnement du services de comptes, l'URL sur laquelle Spotify va rediriger l'utilisateur va contenir notre code d'autorization. 
+
+L'utilisateur à son retour sur l'application va atterir sur le loginScreen nous pouvons donc créer les fonctions suivantes : 
+
+***loginScreen.js***
+```js
+async componentDidMount()
+{
+    //Méthode de AuthUtils 
+    const checkResult = await loginScreenCheck();
+    if(checkResult)
+    {
+        LoginScreen.checkIfConnected();
+    }
+} 
+```
+
+***authUtils.native.js***
+```js
+export const loginScreenCheck = async() => {
+    return true;
+}
+```
+
+***authUtils.js***
+```js
+export const loginScreenCheck = async() => {
+    //On récupère le code
+    let code = window.location.search.substring(6);
+    if (code) {
+        storeData("authorization_code",code);
+        const result = await refreshTokens();
+
+        //On redirige vers la home
+        if(result)
+        {
+            NavigatorRef.replace('Home');
+        }
+        return true;
+    }
+
+    return false;
+}
+```
+
+⚠️ N'oubliez pas l'import de NavigatorRef
+
+Nous pouvons maitenant refaire la récupérations des tokens. 
+
+```js
+const getAuthorizationCode = async() =>
+{
+    const authorizationCode = retrieveData("authorization_code");
+    return authorizationCode
+}
+```
+
+Vous pouvez maintenant copier les autres méthodes du fichier orignal.
+
+:sparkles: Votre application supporte maintenant l'accès depuis un navigateur web.
 

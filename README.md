@@ -5,7 +5,7 @@
 
 ## I. :newspaper: Histoire de React / React Native et but du tutoriel
 
-React est une libraire Javascript dévelopée et lancée par Facebook en 2011 pour répondre aux besoins de ces applications. React permet de créer des interfaces utilisateurs réactives à l'aide de vues et de composants qui vont venir s'adapter aux changements des données de l'application.
+React est une libraire Javascript dévelopée et lancée par Facebook en 2011 pour répondre aux besoins de ces applications, c'est-à-dire d'avoir une page dynamique, qui réagit aux évènements. React permet de créer des interfaces utilisateurs réactives à l'aide de vues et de composants qui vont venir s'adapter aux changements des données de l'application.
 
 React Native est une extension de React développée en 2015 par Facebook qui reprend les principes de React et les applique à la création d'applications natives Android ou iOs en utilisant du code javascript. 
 

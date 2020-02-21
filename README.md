@@ -477,7 +477,6 @@ La documentation complète est disponible à [cette adresse](https://developer.s
 
 Nous allons maintenant voir comment utiliser cette API dans notre application. 
 
-//TODO LINK
 ⚠️ *Les parties se concentrent sur l'intégration de l'API pour la partie Android et iOs du projet, les spécificités propres à l'application web sont détaillées dans la partie **Adapatation au web***
 
 ### VI.I 🚀 Processus d'utilisation de l'API
@@ -861,7 +860,25 @@ async componentDidMount()
 
 ⚠️ N'oubliez pas les imports
 
-Vous remarquerez aussi l'utilisation de la méthode **componentDidMount**, cette méthode est appellée par le flow de React une fois que le composant a été affiché à l'écran ce qui nous permet de lancer des fonctions ou des traitements au moment où l'on peut commencer à modifier le DOM. 
+Vous remarquerez aussi l'utilisation de la méthode **componentDidMount**, cette méthode fait partie de ce qu'on appelle le cycle de vie d'un composant. Nous allons faire une courte parenthèse pour vous expliquer ce concept.
+
+### :arrows_counterclockwise: VIII.IV Le cycle de vie d'un composant
+
+L'image suivante résume le cycle de vie d'un composant : 
+
+![](./images/lifecycle.png)
+
+Ce cycle se découpe en 3 phases :
+1. **Mounting**
+Cette pahse se déroule au moment où le composant est créé et ajouté à la page. React commence par appeller le constructeur de notre omposant, puis sa fonction **render** et enfin la fonction **componentDidMount** au moment où le composant a bien été ajouté au DOM.
+
+2. **Update** 
+Notre composant est dans cette phase tant qu'il est affiché. Il est alors dans un état "réactif" aux changements de ses props, de son state ou de l'appel de la méthode forceUpdate. Si l'un de ces trois évenement a lieu la fonction **render** est à nouveau appellée, et une fois que le DOM a été modifié, la fonction **componentDidUpdate** est appelée.
+
+3. **Unmounting** (*Pas sur le schéma*) 
+Cette se déroule au moment où le composant est retiré de la page, on s'en sert principalement pour libérer certaines valeurs ou faires des modifications mineures. 
+
+
 
 
 ## :radio: IX Utilisation de l'API 

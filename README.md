@@ -1107,5 +1107,22 @@ Vous pouvez maintenant copier les autres méthodes du fichier orignal.
 [5]
 « Quelle sont les différences entre React Native et React.JS ? ⋆ Ambient Formations ». [En ligne]. Disponible sur: https://www.ambient-it.net/quelle-sont-les-differences-entre-react-native-et-reactjs/. [Consulté le: 20-févr-2020].
 
+[6] 
+« AsyncStorage · React Native ». [En ligne]. Disponible sur:Disponible sur: https://facebook.github.io/react-native/. [Consulté le: 20-févr-2020].
+
+[7]
+« AuthSession - Expo Documentation ». [En ligne]. Disponible sur: https://docs.expo.io/versions/latest/sdk/auth-session/. [Consulté le: 20-févr-2020].
+
+[8]
+Bevacqua, Nicolás. bevacqua/local-storage. JavaScript, 2020.[En ligne].  Disponible sur: https://github.com/bevacqua/local-storage. [Consulté le: 20-févr-2020].
+
+[9]
+« Home | Spotify for Developers ». [En ligne]. Disponible sur: https://developer.spotify.com/. [Consulté le: 20-févr-2020].
+
+[10]
+Pérez, José M. JMPerez/spotify-web-api-js. TypeScript, 2020. [En ligne]. Disponible sur: https://github.com/JMPerez/spotify-web-api-js. [Consulté le: 20-févr-2020].
+
+[11]
+« Platform Specific Code · React Native ». [En ligne]. Disponible sur: https://facebook.github.io/react-native/. [Consulté le: 20-févr-2020].
 
 
